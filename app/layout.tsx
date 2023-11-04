@@ -12,8 +12,9 @@ const onest = font({
 });
 
 export const metadata: Metadata = {
-    title: 'MealTime General Application',
-    description: 'MealTime dasbhoard for clients',
+    title: "Mealtime - Mai mult decât un simplu ceai - It's Over 9000!",
+    description:
+        'Proprietățile înalte gustative ale produselor noastre sunt obținute datorită utilizării exclusiv a unor materii prime naturale, precum și a diferitelor metode și tehnici culinare, care sunt perfect stăpânite de bucătarii noștri. Noi din principiu nu folosim coloranți, potențiatori de aromă și conservanți, iar termenul îndelungat de păstrare îl obținem datorită utilizării în producție a înghețării cu șoc. Tuturor le sunt cunoscute proprietățile benefice ale ceaiurilor și limonadelor naturale de casă din pomușoare, al căror gust atrage atât adulții cât și copiii, dar pregătirea unei astfel de băuturi durează foarte mult și necesită abilități culinare considerabile. Cu ajutorul concentratelor ceaiului de casă sau a limonadei, pregătirea băuturilor a devenit mai simplă, rapidă și mai comodă.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
