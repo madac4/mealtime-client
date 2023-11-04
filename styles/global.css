@@ -102,4 +102,9 @@
     h6 {
         @apply text-base font-medium leading-snug text-gray-400;
     }
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 }

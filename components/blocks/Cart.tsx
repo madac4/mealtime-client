@@ -32,7 +32,7 @@ export default function Cart() {
 
                     <div className="fixed z-10 overflow-y-auto transition-transform">
                         <div className="absolute inset-0 overflow-hidden">
-                            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 transition-all">
+                            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-0 md:pl-10 transition-all">
                                 <div className="pointer-events-auto w-screen max-w-lg">
                                     <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                                         <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
@@ -59,33 +59,35 @@ export default function Cart() {
                                                                 />
                                                             ))
                                                         ) : (
-                                                            <h4 className="text-center py-10">
-                                                                Nu sunt produse
-                                                            </h4>
+                                                            <h2 className="text-center py-10">
+                                                                Nu sunt produse în coș
+                                                            </h2>
                                                         )}
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                                            <div className="flex justify-between text-base font-medium text-gray-900">
-                                                <p>Total</p>
-                                                <p>{formatPrice(total)} MDL</p>
-                                            </div>
-                                            <p className="mt-0.5 text-sm text-gray-500">
+                                        {products.length > 0 && (
+                                            <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+                                                <div className="flex justify-between text-base font-medium text-gray-900">
+                                                    <p>Total</p>
+                                                    <p>{formatPrice(total)} MDL</p>
+                                                </div>
+                                                {/* <p className="mt-0.5 text-sm text-gray-500">
                                                 Shipping and taxes calculated at checkout.
-                                            </p>
-                                            <Button
-                                                disabled={loading}
-                                                onClick={sendOrder}
-                                                className="py-7 w-full mt-6 bg-indigo-500 hover:bg-indigo-600 text-md font-semibold">
-                                                {loading && (
-                                                    <Loader2 className="mr-2 h-5 w-5 animate-spin"></Loader2>
-                                                )}
-                                                Trimite comanda
-                                            </Button>
-                                        </div>
+                                            </p> */}
+                                                <Button
+                                                    disabled={loading}
+                                                    onClick={sendOrder}
+                                                    className="py-7 w-full mt-6 bg-red-600 hover:bg-red-500 text-md font-semibold">
+                                                    {loading && (
+                                                        <Loader2 className="mr-2 h-5 w-5 animate-spin"></Loader2>
+                                                    )}
+                                                    Trimite comanda
+                                                </Button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
