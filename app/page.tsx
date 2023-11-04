@@ -11,7 +11,7 @@ export default function Login() {
         router.push('/dashboard');
     };
     return (
-        <div className="flex h-screen w-screen items-center flex-col justify-center">
+        <div className="flex h-screen w-screen items-center flex-col justify-center container">
             <img src="/images/logo.png" alt="" className="w-32 mb-10" />
             <form
                 action="#"
