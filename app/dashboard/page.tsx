@@ -126,9 +126,9 @@ export default function Dashboard() {
                             </Card>
                             <Card className="col-span-2">
                                 <CardHeader>
-                                    <CardTitle>Vânzări recenter</CardTitle>
+                                    <CardTitle>Vânzări recente</CardTitle>
                                     <CardDescription>
-                                        You made 265 sales this month.
+                                        Aveti 265 vânzări în ultimele 30 de zile
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
