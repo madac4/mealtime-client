@@ -123,7 +123,6 @@ export default function Dashboard() {
                                 <RecentSales />
                             </CardContent>
                         </Card>
-
                         <Card className="col-span-2">
                             <CardHeader>
                                 <CardTitle>Suma comenzilor pe companie</CardTitle>
@@ -142,7 +141,7 @@ export default function Dashboard() {
                                 />
                             </CardContent>
                         </Card>
-                        <Card className="col-span-4">
+                        <Card className="lg:col-span-4 col-span-2">
                             <CardHeader>
                                 <CardTitle>Statistica vânzărilor pe lună</CardTitle>
                                 <CardDescription>
