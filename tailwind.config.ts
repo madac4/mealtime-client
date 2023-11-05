@@ -46,7 +46,6 @@ const config: Config = {
                         inverted: '#ffffff', // white
                     },
                 },
-                // dark mode
                 'dark-tremor': {
                     brand: {
                         faint: '#0B1229', // custom

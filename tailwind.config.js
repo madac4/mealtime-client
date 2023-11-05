@@ -17,6 +17,9 @@ module.exports = {
             },
         },
         extend: {
+            screens: {
+                xs: '480px',
+            },
             colors: {
                 border: 'hsl(var(--border))',
                 input: 'hsl(var(--input))',
@@ -51,6 +54,8 @@ module.exports = {
                     DEFAULT: 'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))',
                 },
+                transparent: 'transparent',
+                current: 'currentColor',
                 tremor: {
                     brand: {
                         faint: '#eff6ff', // blue-50
