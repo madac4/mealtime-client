@@ -9,7 +9,9 @@ interface IUserState {
 }
 
 const initialState: IUserState = {
-    user: null,
+    user: {
+        isAdmin: false,
+    },
 };
 
 const userSlice = createSlice({
