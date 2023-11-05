@@ -108,3 +108,6 @@
         margin: 0;
     }
 }
+.recharts-layer.recharts-line {
+    stroke: #ef4444 !important;
+}
