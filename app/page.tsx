@@ -31,13 +31,13 @@ export default function Login() {
                         placeholder="Username (ID)"
                         autoComplete="username"
                         required
-                        className={!loginData.username ? 'placeholder:text-red-400' : ''}
+                        // className={!loginData.username ? 'placeholder:text-red-400' : ''}
                         value={loginData.username}
                         onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
                     />
-                    {!loginData.username && (
+                    {/* {!loginData.username && (
                         <small className="text-red-500">Username (ID) este obligatoriu</small>
-                    )}
+                    )} */}
                 </fieldset>
 
                 <fieldset>
@@ -48,11 +48,11 @@ export default function Login() {
                         required
                         value={loginData.password}
                         onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                        className={!loginData.password ? 'placeholder:text-red-400' : ''}
+                        // className={!loginData.password ? 'placeholder:text-red-400' : ''}
                     />
-                    {!loginData.password && (
+                    {/* {!loginData.password && (
                         <small className="text-red-500">Parola este obligatorie</small>
-                    )}
+                    )} */}
                 </fieldset>
 
                 <Button type="submit" size="lg" className="mt-3">
