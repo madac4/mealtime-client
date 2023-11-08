@@ -54,7 +54,7 @@ export default function Cart() {
                                                         {products.length > 0 ? (
                                                             products.map((product: any) => (
                                                                 <CartProduct
-                                                                    key={product.id}
+                                                                    key={product._id}
                                                                     product={product}
                                                                 />
                                                             ))

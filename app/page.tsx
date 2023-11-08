@@ -3,14 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
-interface ILoginBody {
-    username: string;
-    password: string;
-}
+import { ILogin } from '@/@types/custom';
 
 export default function Login() {
-    const [loginData, setLoginData] = useState<ILoginBody>({ username: '', password: '' });
+    const [loginData, setLoginData] = useState<ILogin>({ username: '', password: '' });
     const router = useRouter();
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

@@ -1,20 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-
-export interface ICartProduct {
-    id: string;
-    name: string;
-    price: number;
-    image: string;
-    packageInfo: string;
-    packageSize: number;
-    quantity: number;
-}
-
-interface ICartState {
-    isCartVisible: boolean;
-    products: ICartProduct[];
-}
+import { ICartProduct, ICartState } from '@/@types/custom';
 
 const initialState: ICartState = {
     isCartVisible: false,
@@ -30,7 +16,9 @@ const cartSlice = createSlice({
         },
 
         addToCart(state, action: PayloadAction<ICartProduct>) {
-            const itemId = state.products.findIndex((product) => product.id === action.payload.id);
+            const itemId = state.products.findIndex(
+                (product) => product._id === action.payload._id,
+            );
 
             if (itemId >= 0) {
                 state.products[itemId].quantity += 1;
@@ -40,7 +28,7 @@ const cartSlice = createSlice({
         },
         increaseQuantity: (state, action: PayloadAction<string>) => {
             const productIndex = state.products.findIndex(
-                (product) => product.id === action.payload,
+                (product) => product._id === action.payload,
             );
             if (productIndex !== -1) {
                 state.products[productIndex].quantity += 1;
@@ -48,7 +36,7 @@ const cartSlice = createSlice({
         },
         decreaseQuantity: (state, action: PayloadAction<string>) => {
             const productIndex = state.products.findIndex(
-                (product) => product.id === action.payload,
+                (product) => product._id === action.payload,
             );
             if (productIndex !== -1) {
                 const product = state.products[productIndex];
@@ -60,7 +48,7 @@ const cartSlice = createSlice({
             }
         },
         removeProduct(state, action: PayloadAction<ICartProduct>) {
-            state.products = state.products.filter((product) => product.id !== action.payload.id);
+            state.products = state.products.filter((product) => product._id !== action.payload._id);
         },
         clearCart(state) {
             state.products = [];

@@ -2,7 +2,6 @@ import { decreaseQuantity, increaseQuantity, removeProduct } from '@/store/slice
 import { Minus, Plus } from 'lucide-react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Input } from '../ui/input';
 
 export default function CartProduct({ product }: any) {
     const dispatch = useDispatch();
@@ -22,7 +21,7 @@ export default function CartProduct({ product }: any) {
         <li className="flex py-6">
             <div className="w-20 h-20 md:h-24 md:w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                 <img
-                    src={product.image}
+                    src={product.image.url}
                     alt={product.name}
                     className="h-full w-full object-cover object-center"
                 />
@@ -43,23 +42,23 @@ export default function CartProduct({ product }: any) {
                     <div className="text-gray-500 flex items-center gap-4">
                         <Minus
                             className="w-5 h-5 text-gray-700 cursor-pointer"
-                            onClick={() => handleDecreaseQuantity(product.id)}
+                            onClick={() => handleDecreaseQuantity(product._id)}
                         />{' '}
                         {/* <Input
                             type="number"
                             value={product.quantity}
                             className="w-10 h-10 p-0 text-center"></Input> */}
-                        {product.quantity}
+                        <p className="select-none">{product.quantity}</p>
                         <Plus
                             className="w-5 h-5 text-gray-700 cursor-pointer"
-                            onClick={() => handleIncreaseQuantity(product.id)}
+                            onClick={() => handleIncreaseQuantity(product._id)}
                         />
                     </div>
 
                     <button
                         type="button"
                         onClick={handleRemoveProduct}
-                        className="font-medium text-red-600 hover:text-red-500">
+                        className="font-medium text-red-600 select-none hover:text-red-500">
                         Șterge
                     </button>
                 </div>

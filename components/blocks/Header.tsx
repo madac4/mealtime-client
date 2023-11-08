@@ -72,6 +72,11 @@ function Header() {
                             className={currentRoute === '/dashboard/orders' ? active : ''}>
                             Comenzi
                         </Link>
+                        <Link
+                            href="/dashboard/products"
+                            className={currentRoute === '/dashboard/products' ? active : ''}>
+                            Produse
+                        </Link>
                     </nav>
                 )}
 
