@@ -1,27 +1,36 @@
 import { Loader2, XIcon } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CartProduct from './CartProduct';
 import { Button } from '../ui/button';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearCart, selectCartTotal, toggleCart } from '@/store/slices/cartSlice';
+import { clearCart, selectCartTotal, toggleCart } from '@/store/cart/cartSlice';
 import { formatPrice } from '@/lib/utils';
+import { useNewOrderMutation } from '@/store/order/orderApi';
+import ErrorMessage from '../ErrorMessage';
 
 export default function Cart() {
-    const [loading, setloading] = useState<boolean>(false);
     const dispatch = useDispatch();
-    const isCartVisible = useSelector((state: any) => state.cart.isCartVisible);
+    const [order, { isLoading, isSuccess, error }] = useNewOrderMutation();
+    const { isCartVisible, products } = useSelector((state: any) => state.cart);
+    const { user } = useSelector((state: any) => state.auth);
     const total = useSelector(selectCartTotal);
-    const products = useSelector((state: any) => state.cart.products);
 
-    const sendOrder = () => {
-        setloading(true);
-        setTimeout(() => {
-            setloading(false);
+    const sendOrder = async () => {
+        await order({
+            customer: user,
+            products,
+            totalPrice: total,
+        });
+    };
+
+    useEffect(() => {
+        if (isSuccess) {
             dispatch(clearCart());
             dispatch(toggleCart());
-            alert('Comanda a fost trimisa');
-        }, 3000);
-    };
+
+            alert('Comanda a fost trimisa cu succes!');
+        }
+    }, [isSuccess]);
     return (
         <>
             {isCartVisible && (
@@ -47,6 +56,8 @@ export default function Cart() {
                                                     </button>
                                                 </div>
                                             </div>
+
+                                            {error && <ErrorMessage error={error} />}
 
                                             <div className="mt-8">
                                                 <div className="flow-root">
@@ -78,10 +89,10 @@ export default function Cart() {
                                                 Shipping and taxes calculated at checkout.
                                             </p> */}
                                                 <Button
-                                                    disabled={loading}
+                                                    disabled={isLoading}
                                                     onClick={sendOrder}
                                                     className="py-7 w-full mt-6 bg-red-600 hover:bg-red-500 text-md font-semibold">
-                                                    {loading && (
+                                                    {isLoading && (
                                                         <Loader2 className="mr-2 h-5 w-5 animate-spin"></Loader2>
                                                     )}
                                                     Trimite comanda

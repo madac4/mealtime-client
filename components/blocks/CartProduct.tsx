@@ -1,4 +1,4 @@
-import { decreaseQuantity, increaseQuantity, removeProduct } from '@/store/slices/cartSlice';
+import { decreaseQuantity, increaseQuantity, removeProduct } from '@/store/cart/cartSlice';
 import { Minus, Plus } from 'lucide-react';
 import React from 'react';
 import { useDispatch } from 'react-redux';

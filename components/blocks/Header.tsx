@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import Link from 'next/link';
 import { Badge } from '../ui/badge';
 import { ShoppingCartIcon } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleCart } from '@/store/slices/cartSlice';
-import { usePathname } from 'next/navigation';
+import { toggleCart } from '@/store/cart/cartSlice';
+import { redirect, usePathname } from 'next/navigation';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,23 +14,20 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { setAdmin } from '@/store/slices/userSlice';
-import { useRouter } from 'next/navigation';
+import { useLogoutQuery } from '@/store/auth/authApi';
 
 function Header() {
+    const [logout, setLogout] = useState<boolean>(false);
     const active = 'font-semibold text-red-500';
     const currentRoute = usePathname();
     const dispatch = useDispatch();
+    const { user } = useSelector((state: any) => state.auth);
+    const {} = useLogoutQuery(undefined, { skip: !logout ? true : false });
     const productsCount = useSelector((state: any) => state.cart.products.length);
-    const isAdmin = useSelector((state: any) => state.user.user.isAdmin);
-    const router = useRouter();
 
-    const handleAdmin = () => {
-        dispatch(setAdmin(!isAdmin));
-    };
-
-    const logout = () => {
-        router.push('/');
+    const handleLogout = async () => {
+        setLogout(true);
+        redirect('/');
     };
 
     return (
@@ -40,7 +37,7 @@ function Header() {
                     <img src="/images/logo.png" alt="MealTime" className="w-14 h-14" />
                 </Link>
 
-                {!isAdmin && (
+                {user.isAdmin ? (
                     <nav className="ml-auto flex gap-4">
                         <Link
                             href="/dashboard"
@@ -48,19 +45,9 @@ function Header() {
                             Dashboard
                         </Link>
                         <Link
-                            href="/dashboard/shop"
-                            className={currentRoute === '/dashboard/shop' ? active : ''}>
-                            Magazin
-                        </Link>
-                    </nav>
-                )}
-
-                {isAdmin && (
-                    <nav className="ml-auto flex gap-4">
-                        <Link
-                            href="/dashboard"
-                            className={currentRoute === '/dashboard' ? active : ''}>
-                            Dashboard
+                            href="/dashboard/companies"
+                            className={currentRoute === '/dashboard/companies' ? active : ''}>
+                            Companii
                         </Link>
                         <Link
                             href="/dashboard/clients"
@@ -78,43 +65,49 @@ function Header() {
                             Produse
                         </Link>
                     </nav>
+                ) : (
+                    <>
+                        <nav className="ml-auto flex gap-4">
+                            <Link
+                                href="/dashboard"
+                                className={currentRoute === '/dashboard' ? active : ''}>
+                                Dashboard
+                            </Link>
+                            <Link
+                                href="/dashboard/shop"
+                                className={currentRoute === '/dashboard/shop' ? active : ''}>
+                                Magazin
+                            </Link>
+                        </nav>
+                        <button onClick={() => dispatch(toggleCart())} className="relative">
+                            <Badge className="absolute -top-3 -right-3">{productsCount}</Badge>
+                            <ShoppingCartIcon></ShoppingCartIcon>
+                        </button>
+                    </>
                 )}
 
-                {!isAdmin && (
-                    <button onClick={() => dispatch(toggleCart())} className="relative">
-                        <Badge className="absolute -top-3 -right-3">{productsCount}</Badge>
-                        <ShoppingCartIcon></ShoppingCartIcon>
-                    </button>
+                {user && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="outline-none">
+                            <Avatar className="w-11 h-11 cursor-pointer">
+                                <AvatarImage src={user.avatar} />
+                                <AvatarFallback>
+                                    {user.UUID.slice(4, 6).toUpperCase()}
+                                </AvatarFallback>
+                            </Avatar>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="mt-2">
+                            <DropdownMenuLabel>Contul meu</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                className="text-red-600 cursor-pointer"
+                                onClick={() => handleLogout()}>
+                                Ieşi din cont
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 )}
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger className="outline-none">
-                        <Avatar className="w-11 h-11 cursor-pointer">
-                            <AvatarImage src="https://github.com/shadcn.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="mt-2">
-                        <DropdownMenuLabel>Contul meu</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="cursor-pointer" onClick={handleAdmin}>
-                            Toggle Admin
-                        </DropdownMenuItem>
-                        {/* <DropdownMenuItem className="cursor-pointer">Profil</DropdownMenuItem> */}
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600 cursor-pointer" onClick={logout}>
-                            Ieşi din cont
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </div>
-            {/* <div className="container mt-6">
-                <nav className="flex gap-7">
-                    <Link href="/dashboard">Overview</Link>
-                    <Link href="/dashboard/shop">Shop</Link>
-                    <Link href="/dashboard/history">History</Link>
-                </nav>
-            </div> */}
         </header>
     );
 }

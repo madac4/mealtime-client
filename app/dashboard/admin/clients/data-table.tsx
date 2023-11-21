@@ -1,7 +1,6 @@
 'use client';
 
 import {
-    ColumnDef,
     ColumnFiltersState,
     flexRender,
     getCoreRowModel,
@@ -9,6 +8,7 @@ import {
     getPaginationRowModel,
     useReactTable,
 } from '@tanstack/react-table';
+
 import {
     Table,
     TableBody,
@@ -20,14 +20,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
-import { AddProductModal } from './add-product';
+import { TableProps } from '@/@types/custom';
+import { AddUserModal } from './add-user';
 
-interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[];
-    data: TData[];
-}
-
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data }: TableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
     const table = useReactTable({
@@ -44,17 +40,17 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
     return (
         <>
-            <div className="flex items-center py-4 justify-between gap-4">
+            <div className="flex items-center py-4 gap-4">
                 <Input
-                    placeholder="Caută după denumire"
-                    value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+                    placeholder="Caută după adresă"
+                    value={(table.getColumn('address')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
-                        table.getColumn('name')?.setFilterValue(event.target.value)
+                        table.getColumn('address')?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm"
+                    className="max-w-sm mr-auto"
                 />
 
-                <AddProductModal />
+                <AddUserModal />
             </div>
             <div className="rounded-md border">
                 <Table className="min-w-[760px] whitespace-nowrap">
@@ -95,7 +91,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    Nu au fost găsite produse <span className="text-lg">☕️</span>
+                                    Nu au fost găsite puncte de livrare{' '}
+                                    <span className="text-lg">🏢</span>
                                 </TableCell>
                             </TableRow>
                         )}

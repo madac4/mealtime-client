@@ -51,8 +51,16 @@ export const columns: ColumnDef<IProduct>[] = [
             const product = row.original;
 
             const deleteProduct = async (id: string) => {
-                alert(id)
-                console.log(id);
+                if (!confirm('Eşti sigur ca vrei sa stergi produsul?')) {
+                    return;
+                }
+                try {
+                    await axiosInstance.delete(`/delete-product/${id}`);
+                    alert('Produsul a fost sters cu succes!');
+                    window.location.reload();
+                } catch (error: any) {
+                    console.log(error.message);
+                }
             };
             return (
                 <Button

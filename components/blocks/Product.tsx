@@ -2,7 +2,7 @@ import React from 'react';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '@/store/slices/cartSlice';
+import { addToCart } from '@/store/cart/cartSlice';
 import { IProductProps } from '@/@types/custom';
 import { formatPrice } from '@/lib/utils';
 
@@ -25,7 +25,11 @@ const Product: React.FC<IProductProps> = ({ product }) => {
     };
     return (
         <div className="p-5 border rounded-md">
-            <img src={product.image.url} alt={product.name} className="rounded mb-2 max-h-[316px] w-full object-contain" />
+            <img
+                src={product.image.url}
+                alt={product.name}
+                className="rounded mb-2 w-full object-contain"
+            />
             <h3>{product.name}</h3>
             <Badge className="my-2">{product.packageInfo}</Badge>
             <p className="mb-2 text-lg font-semibold text-red-600">

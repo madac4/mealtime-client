@@ -3,15 +3,12 @@
 import React, { useState } from 'react';
 import ProductsGrid from '../../../components/sections/ProductsGrid';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useGetProductsQuery } from '@/store/products/productsApi';
 
-export default async function Shop() {
-    const [loading, setLoading] = useState<boolean>(true);
-
+export default function Shop() {
     return (
         <div className="container">
-            {loading ? (
-                <Skeleton className="w-full h-80 rounded-lg my-10" />
-            ) : (
+            <Loading>
                 <div className="h-80 overflow-clip bg-black bg-opacity-50 my-10 rounded-lg relative text-center flex items-center justify-center">
                     <img
                         src="https://mealtime.ro/storage/products/August2020/FiOIa7RAF3b6LKXcAFvK.jpg"
@@ -19,11 +16,18 @@ export default async function Shop() {
                     />
                     <h1 className="text-white">Mai mult decât un simplu ceai</h1>
                 </div>
-            )}
+            </Loading>
 
             <div className="products mb-32 flex flex-col items-center">
-                <ProductsGrid loading={loading} setLoading={setLoading} />
+                <ProductsGrid />
             </div>
         </div>
     );
 }
+
+const Loading: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { isLoading } = useGetProductsQuery({});
+    return (
+        <>{isLoading ? <Skeleton className="w-full h-80 rounded-lg my-10" /> : <>{children}</>}</>
+    );
+};

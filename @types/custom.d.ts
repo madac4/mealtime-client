@@ -36,11 +36,48 @@ export interface IProductBody {
 }
 
 export interface ILogin {
-    username: string;
+    login: string;
     password: string;
 }
 
-export interface ProductTableProps<TData, TValue> {
+export interface TableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
+}
+
+export interface IUser {
+    _id: string;
+    address: string;
+    city: string;
+    company: {
+        name: string;
+    };
+    phone: string;
+    date: string;
+    login: string;
+}
+
+export interface ICompany {
+    _id: string;
+    name: string;
+    address: string;
+    IDNO: string;
+    TVA: string;
+    users: number | Array;
+}
+
+export interface IUserBody {
+    phone: string;
+    password: string;
+    address: string;
+    city: string;
+    UUID: string;
+    companyId: string;
+}
+
+export interface ICompanyBody {
+    name: string;
+    address: string;
+    IDNO: string;
+    TVA: string;
 }

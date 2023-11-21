@@ -9,14 +9,14 @@ export default function Footer() {
     return (
         <footer className="border-t text-center py-5 px-4">
             <small>Copyright &copy; {currentYear}. Mealtime</small>
-            <nav className="flex gap-5 mt-4 justify-center">
+            {/* <nav className="flex gap-5 mt-4 justify-center">
                 <Link href="/privacy" className={currentRoute === '/privacy' ? active : ''}>
                     Privacy
                 </Link>
                 <Link href="/terms" className={currentRoute === '/terms' ? active : ''}>
                     Terms
                 </Link>
-            </nav>
+            </nav> */}
         </footer>
     );
 }

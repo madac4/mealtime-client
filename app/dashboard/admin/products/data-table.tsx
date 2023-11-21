@@ -1,6 +1,7 @@
 'use client';
 
 import {
+    ColumnDef,
     ColumnFiltersState,
     flexRender,
     getCoreRowModel,
@@ -8,7 +9,6 @@ import {
     getPaginationRowModel,
     useReactTable,
 } from '@tanstack/react-table';
-
 import {
     Table,
     TableBody,
@@ -20,11 +20,16 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
-import { ProductTableProps } from '@/@types/custom';
+import { AddProductModal } from './add-product';
+import { IProduct } from '@/@types/custom';
 
-export function DataTable<TData, TValue>({ columns, data }: ProductTableProps<TData, TValue>) {
+interface DataTableProps<TData, TValue> {
+    columns: ColumnDef<TData, TValue>[];
+    data: TData[];
+}
+
+export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
     const table = useReactTable({
         data,
         columns,
@@ -39,15 +44,17 @@ export function DataTable<TData, TValue>({ columns, data }: ProductTableProps<TD
 
     return (
         <>
-            <div className="flex items-center py-4">
+            <div className="flex items-center py-4 justify-between gap-4">
                 <Input
                     placeholder="Caută după denumire"
-                    value={(table.getColumn('companyAddress')?.getFilterValue() as string) ?? ''}
+                    value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
-                        table.getColumn('companyAddress')?.setFilterValue(event.target.value)
+                        table.getColumn('name')?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />
+
+                <AddProductModal />
             </div>
             <div className="rounded-md border">
                 <Table className="min-w-[760px] whitespace-nowrap">
@@ -88,7 +95,7 @@ export function DataTable<TData, TValue>({ columns, data }: ProductTableProps<TD
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    Nu au fost găsite comenzi <span className="text-lg">👀</span>
+                                    Nu au fost găsite produse <span className="text-lg">☕️</span>
                                 </TableCell>
                             </TableRow>
                         )}

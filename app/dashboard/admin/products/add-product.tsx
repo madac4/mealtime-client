@@ -32,7 +32,7 @@ export function AddProductModal() {
         try {
             const { data } = await axiosInstance.post('/add-product', productData);
             if (data.success) {
-                setSuccess(true);
+                setSuccess(data.success);
                 setProductData({
                     name: '',
                     image: '',
