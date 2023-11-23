@@ -2,19 +2,18 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { CreditCard } from 'lucide-react';
+import { Package } from 'lucide-react';
 import { useOrdersCountQuery } from '@/store/analytics/analyticsApi';
 import { Skeleton } from '../ui/skeleton';
 
-export default function OrdersCount() {
-    const { data, error } = useOrdersCountQuery({});
+export default function OrdersCount({ className }: { className?: string }) {
+    const { data } = useOrdersCountQuery({});
 
-    console.log(error);
     return (
-        <Card className="col-span-2">
+        <Card className={className}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Comenzi Efectuate</CardTitle>
-                <CreditCard className="h-4 w-4 text-muted-foreground"></CreditCard>
+                <Package className="h-4 w-4 text-muted-foreground"></Package>
             </CardHeader>
             <CardContent>
                 <Loading>

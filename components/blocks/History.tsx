@@ -5,16 +5,16 @@ import React, { useState, useEffect } from 'react';
 import { Skeleton } from '../ui/skeleton';
 import { formatDateTime, formatPrice } from '@/lib/utils';
 
-export default function History() {
+export default function History({ className }: { className?: string }) {
     const { data } = useOrdersHistoryQuery({});
 
     return (
-        <div className="space-y-8">
+        <div className={`space-y-8 ${className}`}>
             <Loading>
                 <>
                     {data && data.orders.length > 0 ? (
                         data.orders.map((order: any) => (
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2" key={order._id}>
                                 <div className="space-y-1">
                                     <p className="text-sm font-medium leading-none">
                                         {order.products.length} produse

@@ -7,10 +7,10 @@ import { DollarSign } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import { Skeleton } from '../ui/skeleton';
 
-export default function OrdersSum() {
+export default function OrdersSum({ className }: { className?: string }) {
     const { data } = useOrdersSumQuery({});
     return (
-        <Card className="col-span-2">
+        <Card className={className}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Suma Comenzilor</CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground"></DollarSign>
