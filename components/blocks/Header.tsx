@@ -5,7 +5,7 @@ import { Badge } from '../ui/badge';
 import { ShoppingCartIcon } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleCart } from '@/store/cart/cartSlice';
-import { redirect, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -19,6 +19,7 @@ import { useLogoutQuery } from '@/store/auth/authApi';
 function Header() {
     const [logout, setLogout] = useState<boolean>(false);
     const active = 'font-semibold text-red-500';
+    const router = useRouter();
     const currentRoute = usePathname();
     const dispatch = useDispatch();
     const { user } = useSelector((state: any) => state.auth);
@@ -27,7 +28,7 @@ function Header() {
 
     const handleLogout = async () => {
         setLogout(true);
-        redirect('/');
+        router.push('/');
     };
 
     return (

@@ -10,3 +10,19 @@ export function formatPrice(value: number): string {
         value,
     );
 }
+
+export function formatDateTime(stringDate: string): string {
+    const date = new Date(stringDate);
+
+    const pad = (num: number) => (num < 10 ? `0${num}` : num);
+
+    // Extracting day, month, year, hours, and minutes
+    const day = pad(date.getDate());
+    const month = pad(date.getMonth() + 1); // Months are 0-indexed
+    const year = date.getFullYear();
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+
+    // Formatting the date
+    return `${day}.${month}.${year} | ${hours}:${minutes}`;
+}
