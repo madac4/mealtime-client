@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import ReduxProvider from '@/store/ReduxProvider';
 import LoadingScreen from './loading';
 import { useLoadUserQuery } from '@/store/api/apiSlice';
+import Heading from '@/components/Heading';
 
 const onest = font({
     subsets: ['latin'],
@@ -18,6 +19,11 @@ const onest = font({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="ro" suppressHydrationWarning>
+            <Heading
+                title="Platforma pentru parteneri MealTime"
+                description="Platforma pentru parteneri MealTime"
+                keywords="Platforma pentru parteneri MealTime, mealtime, ceaiuri"
+            />
             <body
                 className={cn('min-h-screen bg-background font-sans antialiased', onest.variable)}>
                 <ReduxProvider>
