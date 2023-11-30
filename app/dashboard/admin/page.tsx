@@ -81,7 +81,7 @@ export default function Dashboard() {
 
     return (
         <>
-            {user.isAdmin ? (
+            {!user.isAdmin ? (
                 <div className="dashboard py-5 mb-5">
                     <div className="container">
                         {loadingData ? (

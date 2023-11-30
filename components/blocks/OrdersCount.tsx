@@ -21,9 +21,9 @@ export default function OrdersCount({ className }: { className?: string }) {
                         {data && data.orderCount}
                     </div>
                 </Loading>
-                {/* <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                 <span className="text-green-600">+12%</span> de luna trecută
-            </p> */}
+            </p>
             </CardContent>
         </Card>
     );

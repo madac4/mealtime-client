@@ -7,6 +7,7 @@ import ReduxProvider from '@/store/ReduxProvider';
 import LoadingScreen from './loading';
 import { useLoadUserQuery } from '@/store/api/apiSlice';
 import Heading from '@/components/Heading';
+import { Analytics } from '@vercel/analytics/react';
 
 const onest = font({
     subsets: ['latin'],
@@ -27,7 +28,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <body
                 className={cn('min-h-screen bg-background font-sans antialiased', onest.variable)}>
                 <ReduxProvider>
-                    <Loading>{children}</Loading>
+                    <Loading>
+                        {children}
+                        <Analytics />
+                    </Loading>
                 </ReduxProvider>
             </body>
         </html>
