@@ -33,7 +33,6 @@ function Header() {
     const handleLogout = async () => {
         setLogout(true);
         await signOut();
-        router.push('/');
     };
 
     return (
