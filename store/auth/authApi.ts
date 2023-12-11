@@ -38,7 +38,7 @@ export const authApi = apiSlice.injectEndpoints({
                 }
             },
         }),
-        logout: builder.query({
+        logOut: builder.query({
             query: () => ({
                 url: '/logout',
                 method: 'GET',
@@ -47,8 +47,6 @@ export const authApi = apiSlice.injectEndpoints({
 
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
-                    await queryFulfilled;
-
                     dispatch(userLoggedOut());
                 } catch (error) {
                     console.log(error);
@@ -58,4 +56,4 @@ export const authApi = apiSlice.injectEndpoints({
     }),
 });
 
-export const { useLoginMutation, useLogoutQuery } = authApi;
+export const { useLoginMutation, useLogOutQuery } = authApi;

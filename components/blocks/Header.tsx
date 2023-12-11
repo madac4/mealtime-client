@@ -6,6 +6,8 @@ import { ShoppingCartIcon } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleCart } from '@/store/cart/cartSlice';
 import { useRouter, usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,20 +16,23 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { useLogoutQuery } from '@/store/auth/authApi';
+import { useLogOutQuery } from '@/store/auth/authApi';
 
 function Header() {
-    const [logout, setLogout] = useState<boolean>(false);
     const active = 'font-semibold text-red-500';
+    const [logout, setLogout] = useState<boolean>(false);
     const router = useRouter();
     const currentRoute = usePathname();
     const dispatch = useDispatch();
+    const {} = useLogOutQuery(undefined, {
+        skip: !logout ? true : false,
+    });
     const { user } = useSelector((state: any) => state.auth);
-    const {} = useLogoutQuery(undefined, { skip: !logout ? true : false });
     const productsCount = useSelector((state: any) => state.cart.products.length);
 
     const handleLogout = async () => {
         setLogout(true);
+        await signOut();
         router.push('/');
     };
 
