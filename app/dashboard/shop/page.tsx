@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import ProductsGrid from '../../../components/sections/ProductsGrid';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useGetProductsQuery } from '@/store/products/productsApi';

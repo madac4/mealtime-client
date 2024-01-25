@@ -21,7 +21,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { AddProductModal } from './add-product';
-import { IProduct } from '@/@types/custom';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];

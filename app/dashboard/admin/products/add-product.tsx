@@ -1,4 +1,3 @@
-import { IProductBody } from '@/@types/custom';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -10,66 +9,59 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { axiosInstance } from '@/utils/axiosInstance';
+import { useCreateProductMutation } from '@/store/products/productsApi';
 import { Loader2, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as validation from 'zod';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form';
+import { toBase64 } from '@/lib/utils';
+import ErrorMessage from '@/components/ErrorMessage';
 
 export function AddProductModal() {
-    const [loading, setLoading] = useState<boolean>(false);
-    const [success, setSuccess] = useState<boolean>(false);
-    const [productData, setProductData] = useState<IProductBody>({
-        name: '',
-        image: '',
-        UUID: '',
-        price: 0,
-        packageInfo: 'Cutie (24 buc.)',
-        packageSize: 24,
+    const [createProduct, { isLoading, isSuccess, error }] = useCreateProductMutation();
+    const formSchema = validation
+        .object({
+            name: validation
+                .string()
+                .min(3, { message: 'Numele trebuie să aibă minim 3 caractere' }),
+            image: validation.instanceof(File),
+            UUID: validation.string(),
+            price: validation.string(),
+            packageInfo: validation.string(),
+            packageSize: validation.string(),
+        })
+        .required();
+
+    const form = useForm<validation.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: '',
+            image: new File([], ''),
+            UUID: '',
+            price: '',
+            packageInfo: '',
+            packageSize: '',
+        },
     });
-    const addNewProduct = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setLoading(true);
-        try {
-            const { data } = await axiosInstance.post('/add-product', productData);
-            if (data.success) {
-                setSuccess(data.success);
-                setProductData({
-                    name: '',
-                    image: '',
-                    UUID: '',
-                    price: 0,
-                    packageInfo: 'Cutie (24 buc.)',
-                    packageSize: 24,
-                });
-            }
-            setLoading(false);
-        } catch (error: any) {
-            console.log(error.message);
-            setSuccess(false);
-            setLoading(false);
-        }
 
-        setTimeout(() => setSuccess(false), 1500);
-    };
-
-    const handleProductData = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.name === 'image') {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (reader.readyState === 2) {
-                    setProductData({
-                        ...productData,
-                        [event.target.name]: reader.result as string,
-                    });
-                }
-            };
-            reader.readAsDataURL(event.target.files![0]);
-        } else {
-            setProductData({
-                ...productData,
-                [event.target.name]: event.target.value,
-            });
-        }
+    const handleAddProduct = async (values: validation.infer<typeof formSchema>) => {
+        const base64Image = await toBase64(values.image);
+        await createProduct({
+            name: values.name,
+            image: base64Image,
+            UUID: values.UUID,
+            price: Number(values.price),
+            packageInfo: values.packageInfo,
+            packageSize: Number(values.packageSize),
+        });
     };
 
     return (
@@ -82,6 +74,7 @@ export function AddProductModal() {
                     <Plus className="ml-2 h-4 w-4"></Plus>
                 </Button>
             </DialogTrigger>
+
             <DialogContent className="sm:max-w-[595px]">
                 <DialogHeader>
                     <DialogTitle>Adaugă un produs nou</DialogTitle>
@@ -89,99 +82,139 @@ export function AddProductModal() {
                         Completează toate câmpurile pentru a crea un produs nou
                     </DialogDescription>
                 </DialogHeader>
-                {success && (
-                    <div className="p-4 bg-green-200 rounded-sm flex items-center gap-2">
+                {isSuccess && (
+                    <div className="p-3 bg-green-200 rounded-sm flex items-center gap-2">
                         Produsul a fost adăugat cu success <span className="text-lg">✅</span>
                     </div>
                 )}
-                <form className="grid gap-4 py-4" onSubmit={addNewProduct}>
-                    <div className="xs:grid xs:grid-cols-4 items-center gap-4">
-                        <Label htmlFor="image" className="text-right">
-                            Imaginea
-                        </Label>
-                        <Input
-                            id="image"
-                            type="file"
-                            accept="image/*"
-                            name="image"
-                            className="col-span-3"
-                            onChange={handleProductData}
-                        />
-                    </div>
-                    <div className="xs:grid xs:grid-cols-4 items-center gap-4">
-                        <Label htmlFor="name" className="text-right">
-                            Denumirea
-                        </Label>
-                        <Input
-                            id="name"
-                            value={productData.name}
+                {error && <ErrorMessage error={error} />}
+                <Form {...form}>
+                    <form
+                        encType="multipart/form-data"
+                        className="grid gap-4 py-4"
+                        onSubmit={form.handleSubmit(handleAddProduct)}>
+                        <FormField
+                            control={form.control}
                             name="name"
-                            className="col-span-3"
-                            onChange={handleProductData}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Denumirea Produsului</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            id="name"
+                                            type="text"
+                                            placeholder='Ceai "Greenfield" 100g'
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-                    <div className="xs:grid xs:grid-cols-4 items-center gap-4">
-                        <Label htmlFor="packageSize" className="text-right">
-                            Unități în cutie
-                        </Label>
-                        <Input
-                            id="packageSize"
-                            value={productData.packageSize}
-                            name="packageSize"
-                            type="number"
-                            onChange={handleProductData}
-                            className="col-span-3"
-                        />
-                    </div>
-                    <div className="xs:grid xs:grid-cols-4 items-center gap-4">
-                        <Label htmlFor="packageInfo" className="text-right">
-                            Info. despre cutie
-                        </Label>
-                        <Input
-                            id="packageInfo"
+                        <FormField
+                            control={form.control}
                             name="packageInfo"
-                            type="text"
-                            value={productData.packageInfo}
-                            onChange={handleProductData}
-                            className="col-span-3"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Info. despre cutie</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            id="packageInfo"
+                                            type="text"
+                                            placeholder="ex: Cutie 24 bucăți"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-                    <div className="xs:grid xs:grid-cols-4 items-center gap-4">
-                        <Label htmlFor="UUID" className="text-right">
-                            UUID (ID din 1C)
-                        </Label>
-                        <Input
-                            id="UUID"
-                            name="UUID"
-                            type="text"
-                            value={productData.UUID}
-                            className="col-span-3"
-                            onChange={handleProductData}
+                        <FormField
+                            control={form.control}
+                            name="packageSize"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Unități în cutie</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            id="packageSize"
+                                            type="text"
+                                            placeholder="24"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-                    <div className="xs:grid xs:grid-cols-4 items-center gap-4">
-                        <Label htmlFor="price" className="text-right">
-                            Preț
-                        </Label>
-                        <Input
-                            id="price"
+                        <FormField
+                            control={form.control}
                             name="price"
-                            type="number"
-                            value={productData.price}
-                            className="col-span-3"
-                            onChange={handleProductData}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Preț</FormLabel>
+                                    <FormControl>
+                                        <Input id="price" type="text" placeholder="17" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-                    <DialogFooter>
-                        <Button
-                            type="submit"
-                            disabled={loading}
-                            className="bg-green-500 hover:bg-green-600">
-                            {loading && <Loader2 className="mr-1 h-4 w-4 animate-spin"></Loader2>}
-                            Publică produsul
-                        </Button>
-                    </DialogFooter>
-                </form>
+                        <FormField
+                            control={form.control}
+                            name="UUID"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>UUID</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            id="UUID"
+                                            type="text"
+                                            placeholder="ID Unic din 1C"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="image"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Imaginea</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            id="image"
+                                            accept="image/*"
+                                            className="p-2"
+                                            onChange={(e) =>
+                                                field.onChange(
+                                                    e.target.files ? e.target.files[0] : null,
+                                                )
+                                            }
+                                            type="file"
+                                            multiple={false}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <DialogFooter>
+                            <Button
+                                type="submit"
+                                disabled={isLoading}
+                                className="bg-green-500 hover:bg-green-600">
+                                {isLoading && (
+                                    <Loader2 className="mr-1 h-4 w-4 animate-spin"></Loader2>
+                                )}
+                                Publică produsul
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </Form>
             </DialogContent>
         </Dialog>
     );

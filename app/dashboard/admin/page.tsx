@@ -4,14 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Building2, CreditCard, DollarSign, Package } from 'lucide-react';
 import { BarChart, LineChart } from '@tremor/react';
 import { useSelector } from 'react-redux';
-import { axiosInstance } from '@/utils/axiosInstance';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Dashboard() {
     const { user } = useSelector((state: any) => state.auth);
     const [productsStatistic, setProductsStatistic] = useState<any>(null);
-    const [loadingData, setLoadingData] = useState<boolean>(true);
+    const [loadingData, setLoadingData] = useState<boolean>(false);
     const chartdata = [
         {
             name: 'Rompetrrol',
@@ -62,223 +61,139 @@ export default function Dashboard() {
         { date: 'Dec 23', 'Nr. de comenzi': null, 'Venit din comenzi': null },
     ];
 
-    const getProductsStatistics = async () => {
-        try {
-            const { data } = await axiosInstance.get('/statistics/products');
-            if (data.success) {
-                setProductsStatistic(data);
-                setLoadingData(false);
-            }
-        } catch (error: any) {
-            setLoadingData(false);
-            console.log(error.message);
-        }
-    };
-
-    useEffect(() => {
-        getProductsStatistics();
-    }, []);
-
     return (
         <>
-            {!user.isAdmin ? (
-                <div className="dashboard py-5 mb-5">
-                    <div className="container">
-                        {loadingData ? (
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                                <Skeleton className="h-full h-[130px]" />
-                                <Skeleton className="h-full h-[130px]" />
-                                <Skeleton className="h-full h-[130px]" />
-                                <Skeleton className="h-full h-[130px]" />
-                                <Skeleton className="col-span-2 h-[470px]" />
-                                <Skeleton className="col-span-2 h-[470px]" />
-                                <Skeleton className="lg:col-span-4 col-span-2 h-[440px]" />
-                            </div>
-                        ) : (
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                                <Card>
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium">
-                                            Venit Total
-                                        </CardTitle>
-                                        <DollarSign className="h-4 w-4 text-muted-foreground"></DollarSign>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="md:text-2xl xs:text-xl text-md font-bold">
-                                            45.231,89 MDL
-                                        </div>
-                                        <p className="text-xs text-muted-foreground mt-1">
-                                            <span className="text-green-600">+20.1%</span> de luna
-                                            trecută
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                                <Card>
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium">
-                                            Comenzi
-                                        </CardTitle>
-                                        <CreditCard className="h-4 w-4 text-muted-foreground"></CreditCard>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="md:text-2xl xs:text-xl text-md font-bold">
-                                            5.291
-                                        </div>
-                                        <p className="text-xs text-muted-foreground mt-1">
-                                            <span className="text-green-600">+69.1%</span> de luna
-                                            trecută
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                                <Card>
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium">
-                                            Clienți
-                                        </CardTitle>
-                                        <Building2 className="h-4 w-4 text-muted-foreground"></Building2>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="md:text-2xl xs:text-xl text-md font-bold">
-                                            82
-                                        </div>
-                                        <p className="text-xs text-muted-foreground mt-1">
-                                            <span className="text-green-600">+30</span> de anul
-                                            trecut
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                                <Card>
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium">
-                                            Produse
-                                        </CardTitle>
-                                        <Package className="h-4 w-4 text-muted-foreground"></Package>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="md:text-2xl xs:text-xl text-md font-bold">
-                                            {productsStatistic?.productsCount}
-                                        </div>
-                                        {productsStatistic?.newProducts > 0 ? (
-                                            <p className="text-xs text-muted-foreground mt-1">
-                                                <span className="text-green-600">
-                                                    +{productsStatistic?.newProducts}
-                                                </span>{' '}
-                                                de anul trecut
-                                            </p>
-                                        ) : (
-                                            <p className="text-xs text-muted-foreground mt-1">
-                                                Produse în vânzare
-                                            </p>
-                                        )}
-                                    </CardContent>
-                                </Card>
-                                <Card className="col-span-2">
-                                    <CardHeader>
-                                        <CardTitle>Vânzări recente</CardTitle>
-                                        <CardDescription>
-                                            Aveti 265 vânzări în ultimele 30 de zile
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <RecentSales />
-                                    </CardContent>
-                                </Card>
-                                <Card className="col-span-2">
-                                    <CardHeader>
-                                        <CardTitle>Suma comenzilor pe companie</CardTitle>
-                                        <CardDescription>
-                                            Suma totala a comenzilor create pe platforma Mealtime
-                                        </CardDescription>
-                                    </CardHeader>
+            <div className="dashboard py-5 mb-5">
+                <div className="container">
+                    {loadingData ? (
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                            <Skeleton className="h-full h-[130px]" />
+                            <Skeleton className="h-full h-[130px]" />
+                            <Skeleton className="h-full h-[130px]" />
+                            <Skeleton className="h-full h-[130px]" />
+                            <Skeleton className="col-span-2 h-[470px]" />
+                            <Skeleton className="col-span-2 h-[470px]" />
+                            <Skeleton className="lg:col-span-4 col-span-2 h-[440px]" />
+                        </div>
+                    ) : (
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                            <Card>
+                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                    <CardTitle className="text-sm font-medium">
+                                        Venit Total
+                                    </CardTitle>
+                                    <DollarSign className="h-4 w-4 text-muted-foreground"></DollarSign>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="md:text-2xl xs:text-xl text-md font-bold">
+                                        45.231,89 MDL
+                                    </div>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        <span className="text-green-600">+20.1%</span> de luna
+                                        trecută
+                                    </p>
+                                </CardContent>
+                            </Card>
+                            <Card>
+                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                    <CardTitle className="text-sm font-medium">Comenzi</CardTitle>
+                                    <CreditCard className="h-4 w-4 text-muted-foreground"></CreditCard>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="md:text-2xl xs:text-xl text-md font-bold">
+                                        5.291
+                                    </div>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        <span className="text-green-600">+69.1%</span> de luna
+                                        trecută
+                                    </p>
+                                </CardContent>
+                            </Card>
+                            <Card>
+                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                    <CardTitle className="text-sm font-medium">Clienți</CardTitle>
+                                    <Building2 className="h-4 w-4 text-muted-foreground"></Building2>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="md:text-2xl xs:text-xl text-md font-bold">
+                                        82
+                                    </div>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        <span className="text-green-600">+30</span> de anul trecut
+                                    </p>
+                                </CardContent>
+                            </Card>
+                            <Card>
+                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                    <CardTitle className="text-sm font-medium">Produse</CardTitle>
+                                    <Package className="h-4 w-4 text-muted-foreground"></Package>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="md:text-2xl xs:text-xl text-md font-bold">
+                                        29
+                                    </div>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        <span className="text-green-600">+9</span> de anul trecut
+                                    </p>
+                                    {/* <p className="text-xs text-muted-foreground mt-1">
+                                            Produse în vânzare
+                                        </p> */}
+                                </CardContent>
+                            </Card>
+                            <Card className="col-span-2">
+                                <CardHeader>
+                                    <CardTitle>Vânzări recente</CardTitle>
+                                    <CardDescription>
+                                        Aveti 265 vânzări în ultimele 30 de zile
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <RecentSales />
+                                </CardContent>
+                            </Card>
+                            <Card className="col-span-2">
+                                <CardHeader>
+                                    <CardTitle>Suma comenzilor pe companie</CardTitle>
+                                    <CardDescription>
+                                        Suma totala a comenzilor create pe platforma Mealtime
+                                    </CardDescription>
+                                </CardHeader>
 
-                                    <CardContent>
-                                        <BarChart
-                                            data={chartdata}
-                                            index="name"
-                                            categories={['Suma comenzilor (MDL)']}
-                                            showAnimation
-                                            yAxisWidth={48}
-                                        />
-                                    </CardContent>
-                                </Card>
-                                <Card className="lg:col-span-4 col-span-2">
-                                    <CardHeader>
-                                        <CardTitle>Statistica vânzărilor pe lună</CardTitle>
-                                        <CardDescription>
-                                            Suma si numarul total al vânzărilor efectuate prin
-                                            platforma MealTime
-                                        </CardDescription>
-                                    </CardHeader>
+                                <CardContent>
+                                    <BarChart
+                                        data={chartdata}
+                                        index="name"
+                                        categories={['Suma comenzilor (MDL)']}
+                                        showAnimation
+                                        yAxisWidth={48}
+                                    />
+                                </CardContent>
+                            </Card>
+                            <Card className="lg:col-span-4 col-span-2">
+                                <CardHeader>
+                                    <CardTitle>Statistica vânzărilor pe lună</CardTitle>
+                                    <CardDescription>
+                                        Suma si numarul total al vânzărilor efectuate prin platforma
+                                        MealTime
+                                    </CardDescription>
+                                </CardHeader>
 
-                                    <CardContent>
-                                        <LineChart
-                                            data={ordersStatistics}
-                                            index="date"
-                                            showAnimation
-                                            connectNulls={true}
-                                            colors={['green']}
-                                            categories={['Nr. de comenzi', 'Venit din comenzi']}
-                                            yAxisWidth={50}
-                                        />
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        )}
-                    </div>
+                                <CardContent>
+                                    <LineChart
+                                        data={ordersStatistics}
+                                        index="date"
+                                        showAnimation
+                                        connectNulls={true}
+                                        colors={['green']}
+                                        categories={['Nr. de comenzi', 'Venit din comenzi']}
+                                        yAxisWidth={50}
+                                    />
+                                </CardContent>
+                            </Card>
+                        </div>
+                    )}
                 </div>
-            ) : (
-                <h1 className="py-20 text-center">Dashboard în dezvoltare</h1>
-                // <div className="dashboard py-5 mb-5">
-                //     <div className="container">
-                //         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                //             <Card className="col-span-2">
-                //                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                //                     <CardTitle className="text-sm font-medium">
-                //                         Suma Comenzilor
-                //                     </CardTitle>
-                //                     <DollarSign className="h-4 w-4 text-muted-foreground"></DollarSign>
-                //                 </CardHeader>
-                //                 <CardContent>
-                //                     <div className="md:text-2xl xs:text-xl text-md font-bold">
-                //                         15.179 MDL
-                //                     </div>
-                //                     <p className="text-xs text-muted-foreground mt-1">
-                //                         <span className="text-red-600">-10.9%</span> de luna trecută
-                //                     </p>
-                //                 </CardContent>
-                //             </Card>
-                //             <Card className="col-span-2">
-                //                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                //                     <CardTitle className="text-sm font-medium">
-                //                         Comenzi Efectuate
-                //                     </CardTitle>
-                //                     <CreditCard className="h-4 w-4 text-muted-foreground"></CreditCard>
-                //                 </CardHeader>
-                //                 <CardContent>
-                //                     <div className="md:text-2xl xs:text-xl text-md font-bold">
-                //                         11
-                //                     </div>
-                //                     <p className="text-xs text-muted-foreground mt-1">
-                //                         <span className="text-green-600">+12%</span> de luna trecută
-                //                     </p>
-                //                 </CardContent>
-                //             </Card>
-                //             <Card className="col-span-4">
-                //                 <CardHeader>
-                //                     <CardTitle>Achiziții recente</CardTitle>
-                //                     <CardDescription>
-                //                         You made 265 sales this month.
-                //                     </CardDescription>
-                //                 </CardHeader>
-                //                 <CardContent>
-                //                     <RecentSales />
-                //                     <RecentSales />
-                //                 </CardContent>
-                //             </Card>
-                //         </div>
-                //     </div>
-                // </div>
-            )}
+            </div>
         </>
     );
 }

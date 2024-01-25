@@ -26,3 +26,37 @@ export function formatDateTime(stringDate: string): string {
     // Formatting the date
     return `${day}.${month}.${year} | ${hours}:${minutes}`;
 }
+
+export const toBase64 = (file: File) => {
+    return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+
+        fileReader.readAsDataURL(file);
+
+        fileReader.onload = () => {
+            resolve(fileReader.result);
+        };
+
+        fileReader.onerror = (error) => {
+            reject(error);
+        };
+    });
+};
+
+export const formattedDate = (date: Date) => {
+    return date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    });
+};
+export const formattedTime = (date: Date) => {
+    return date.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+};
+
+export const formatPhone = (phone: string) => {
+    return `${phone.slice(0, 4)} ${phone.slice(4, 6)} ${phone.slice(6, 9)} ${phone.slice(9)}`;
+};

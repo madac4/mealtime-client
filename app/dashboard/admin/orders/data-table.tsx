@@ -41,10 +41,10 @@ export function DataTable<TData, TValue>({ columns, data }: TableProps<TData, TV
         <>
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Caută după denumire"
-                    value={(table.getColumn('companyAddress')?.getFilterValue() as string) ?? ''}
+                    placeholder="Caută după adresă"
+                    value={(table.getColumn('address')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
-                        table.getColumn('companyAddress')?.setFilterValue(event.target.value)
+                        table.getColumn('address')?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />

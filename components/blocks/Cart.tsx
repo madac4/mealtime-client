@@ -28,7 +28,7 @@ export default function Cart() {
             dispatch(clearCart());
             dispatch(toggleCart());
 
-            alert('Comanda a fost trimisa cu succes!');
+            alert('Comanda a fost trimisă cu succes!');
         }
     }, [isSuccess]);
     return (
@@ -82,8 +82,8 @@ export default function Cart() {
                                         {products.length > 0 && (
                                             <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                                                 <div className="flex justify-between text-base font-medium text-gray-900">
-                                                    <p>Total</p>
-                                                    <p>{formatPrice(total)} MDL</p>
+                                                    <p>Comanda v-a fi expediată pe mail!</p>
+                                                    {/* <p>{formatPrice(total)} MDL</p> */}
                                                 </div>
                                                 {/* <p className="mt-0.5 text-sm text-gray-500">
                                                 Shipping and taxes calculated at checkout.

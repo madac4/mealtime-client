@@ -19,11 +19,13 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
+import userAuth from '@/hooks/userAuth';
 
 export default function Login() {
     const [login, { isLoading, isSuccess, error }] = useLoginMutation();
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const { user } = useSelector((state: any) => state.auth);
+    const isAuthentificated = userAuth();
     const router = useRouter();
     const formSchema = validation
         .object({
@@ -54,15 +56,23 @@ export default function Login() {
 
     useEffect(() => {
         if (isSuccess) {
-            user.isAdmin ? router.push('/dashboard/admin') : router.push('/dashboard');
+            user.isAdmin ? router.push('/dashboard/admin') : router.push('/dashboard/shop');
         }
     }, [isSuccess, user]);
+
+    useEffect(() => {
+        if (isAuthentificated && user?.isAdmin) {
+            router.push('/dashboard/admin');
+        } else if (isAuthentificated && !user?.isAdmin) {
+            router.push('/dashboard/shop');
+        }
+    }, [isAuthentificated]);
 
     return (
         <div className="flex h-screen w-screen items-center flex-col justify-center container">
             <img src="/images/logo.png" alt="" className="w-32 mb-10" />
 
-            {error && <ErrorMessage error={error} />}
+            {error && <ErrorMessage error={error} type="text" />}
 
             <Form {...form}>
                 <form

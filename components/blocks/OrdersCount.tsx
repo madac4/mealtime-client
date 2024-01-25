@@ -22,8 +22,9 @@ export default function OrdersCount({ className }: { className?: string }) {
                     </div>
                 </Loading>
                 <p className="text-xs text-muted-foreground mt-1">
-                <span className="text-green-600">+12%</span> de luna trecută
-            </p>
+                    {/* <span className="text-green-600">+12%</span> de luna trecută */}
+                    Numărul de comenzi efectuate
+                </p>
             </CardContent>
         </Card>
     );

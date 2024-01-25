@@ -1,9 +1,9 @@
 'use client';
 
 import { useOrdersHistoryQuery } from '@/store/analytics/analyticsApi';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Skeleton } from '../ui/skeleton';
-import { formatDateTime, formatPrice } from '@/lib/utils';
+import { formatDateTime } from '@/lib/utils';
 
 export default function History({ className }: { className?: string }) {
     const { data } = useOrdersHistoryQuery({});
@@ -23,13 +23,15 @@ export default function History({ className }: { className?: string }) {
                                         {formatDateTime(order.createdAt)}
                                     </p>
                                 </div>
-                                <p className="ml-auto font-medium md:text-base text-sm whitespace-nowrap text-blue-700">
+                                {/* <p className="ml-auto font-medium md:text-base text-sm whitespace-nowrap text-blue-700">
                                     {formatPrice(order.totalPrice)} MDL
-                                </p>
+                                </p> */}
                             </div>
                         ))
                     ) : (
-                        <h3 className="text-center font-semibold mx-auto">Nu există comenzi</h3>
+                        <h3 className="text-center font-semibold mx-auto">
+                            Încă nu ai plasat nici o comandă
+                        </h3>
                     )}
                 </>
             </Loading>

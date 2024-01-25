@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Heading
                 title="Platforma pentru parteneri MealTime"
                 description="Platforma pentru parteneri MealTime"
-                keywords="Platforma pentru parteneri MealTime, mealtime, ceaiuri"
+                keywords="Platforma pentru parteneri MealTime, mealtime, ceaiuri,"
             />
             <body
                 className={cn('min-h-screen bg-background font-sans antialiased', onest.variable)}>

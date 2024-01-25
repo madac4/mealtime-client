@@ -111,3 +111,11 @@
 .recharts-layer.recharts-line {
     stroke: #ef4444 !important;
 }
+
+.delogged {
+    width: 420px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

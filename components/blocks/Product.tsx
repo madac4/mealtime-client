@@ -4,7 +4,6 @@ import { Button } from '../ui/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '@/store/cart/cartSlice';
 import { IProductProps } from '@/@types/custom';
-import { formatPrice } from '@/lib/utils';
 
 const Product: React.FC<IProductProps> = ({ product }) => {
     const dispatch = useDispatch();
@@ -30,11 +29,11 @@ const Product: React.FC<IProductProps> = ({ product }) => {
                 alt={product.name}
                 className="rounded mb-2 w-full object-contain"
             />
-            <h3>{product.name}</h3>
+            <h4>{product.name}</h4>
             <Badge className="my-2">{product.packageInfo}</Badge>
-            <p className="mb-2 text-lg font-semibold text-red-600">
+            {/* <p className="mb-2 text-lg font-semibold text-red-600">
                 {formatPrice(product.price)} MDL / buc.
-            </p>
+            </p> */}
             <Button
                 className="bg-green-500 w-full mt-auto hover:bg-green-600 active:scale-[0.98] transition-all"
                 onClick={handleAddToCart}>

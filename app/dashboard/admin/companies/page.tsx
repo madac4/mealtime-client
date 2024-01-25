@@ -6,29 +6,21 @@ import { columns } from './columns';
 import { ICompany } from '@/@types/custom';
 import { axiosInstance } from '@/utils/axiosInstance';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useGetCompaniesQuery } from '@/store/company/companyApi';
 
 export default function Companies() {
-    const [companies, setCompanies] = useState<ICompany[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-
-    const handleCompanies = async () => {
-        await axiosInstance.get('/get-companies').then((res) => {
-            if (res.data.success) {
-                setCompanies(res.data.companies);
-                setLoading(false);
-            } else {
-                setLoading(false);
-            }
-        });
+    const { data, error, isLoading, isSuccess } = useGetCompaniesQuery({}) as {
+        data: {
+            companies: ICompany[];
+        };
+        error: any;
+        isLoading: boolean;
+        isSuccess: boolean;
     };
-
-    useEffect(() => {
-        handleCompanies();
-    }, []);
     return (
         <div className="orders py-10 mb-10">
             <div className="container">
-                {loading ? (
+                {isLoading ? (
                     <div className="loading py-4">
                         <div className="flex justify-between">
                             <Skeleton className="w-64 h-12 rounded-lg mb-4" />
@@ -37,7 +29,7 @@ export default function Companies() {
                         <Skeleton className="w-full h-screen rounded-lg" />
                     </div>
                 ) : (
-                    <DataTable columns={columns} data={companies} />
+                    <DataTable columns={columns} data={data.companies} />
                 )}
             </div>
         </div>

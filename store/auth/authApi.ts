@@ -53,6 +53,14 @@ export const authApi = apiSlice.injectEndpoints({
                 }
             },
         }),
+        register: builder.mutation({
+            query: (body) => ({
+                url: '/register',
+                method: 'POST',
+                body,
+                credentials: 'include' as const,
+            }),
+        }),
     }),
 });
 

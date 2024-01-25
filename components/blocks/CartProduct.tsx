@@ -32,11 +32,11 @@ export default function CartProduct({ product }: any) {
                     <div className="flex justify-between text-base font-medium text-gray-900">
                         <h6 className="text-gray-700">{product.name}</h6>
                         <div className="prices whitespace-nowrap flex items-end flex-col">
-                            <p className="ml-4">{product.price * product.packageSize} MDL</p>
-                            <small className="block">{product.price} MDL (buc.)</small>
+                            {/* <p className="ml-4">{product.price * product.packageSize} MDL</p> */}
+                            {/* <small className="block">{product.price} MDL (buc.)</small> */}
+                            <p className="mt-1 text-sm text-gray-500">{product.packageInfo}</p>
                         </div>
                     </div>
-                    <p className="mt-1 text-sm text-gray-500">{product.package}</p>
                 </div>
                 <div className="flex flex-1 items-center justify-between text-sm">
                     <div className="text-gray-500 flex items-center gap-4">
