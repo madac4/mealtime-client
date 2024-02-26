@@ -9,20 +9,20 @@ export default function History({ className }: { className?: string }) {
     const { data } = useOrdersHistoryQuery({});
 
     return (
-        <div className={`space-y-8 ${className}`}>
+        <div className={`space-y-6 ${className}`}>
             <Loading>
                 <>
                     {data && data.orders.length > 0 ? (
                         data.orders.map((order: any) => (
-                            <div className="flex items-center gap-2" key={order._id}>
-                                <div className="space-y-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        {order.products.length} produse
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        {formatDateTime(order.createdAt)}
-                                    </p>
-                                </div>
+                            <div
+                                className="flex items-center gap-2 justify-between"
+                                key={order._id}>
+                                <p className="text-sm font-medium leading-none">
+                                    {order.products.length} produse
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                    {formatDateTime(order.createdAt)}
+                                </p>
                                 {/* <p className="ml-auto font-medium md:text-base text-sm whitespace-nowrap text-blue-700">
                                     {formatPrice(order.totalPrice)} MDL
                                 </p> */}

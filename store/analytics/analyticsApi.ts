@@ -9,20 +9,15 @@ export const analyticsApi = apiSlice.injectEndpoints({
                 credentials: 'include' as const,
             }),
         }),
-        ordersCount: builder.query({
+
+        userCardAnalytics: builder.query({
             query: () => ({
-                url: '/orders',
+                url: '/user/card-analytics',
                 method: 'GET',
                 credentials: 'include' as const,
             }),
         }),
-        ordersSum: builder.query({
-            query: () => ({
-                url: '/orders/sum',
-                method: 'GET',
-                credentials: 'include' as const,
-            }),
-        }),
+
         adminCardAnalytics: builder.query({
             query: () => ({
                 url: '/admin/card-analytics',
@@ -33,9 +28,5 @@ export const analyticsApi = apiSlice.injectEndpoints({
     }),
 });
 
-export const {
-    useOrdersHistoryQuery,
-    useOrdersCountQuery,
-    useOrdersSumQuery,
-    useAdminCardAnalyticsQuery,
-} = analyticsApi;
+export const { useOrdersHistoryQuery, useAdminCardAnalyticsQuery, useUserCardAnalyticsQuery } =
+    analyticsApi;

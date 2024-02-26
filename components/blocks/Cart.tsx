@@ -7,6 +7,7 @@ import { clearCart, selectCartTotal, toggleCart } from '@/store/cart/cartSlice';
 import { formatPrice } from '@/lib/utils';
 import { useNewOrderMutation } from '@/store/order/orderApi';
 import ErrorMessage from '../ErrorMessage';
+import { toast } from 'sonner';
 
 export default function Cart() {
     const dispatch = useDispatch();
@@ -28,7 +29,19 @@ export default function Cart() {
             dispatch(clearCart());
             dispatch(toggleCart());
 
-            alert('Comanda a fost trimisă cu succes!');
+            toast.success('Comanda a fost trimisă cu succes!', {
+                icon: <span className="text-lg">✅</span>,
+                position: 'top-center',
+            });
+        }
+
+        if (error) {
+            if ('data' in error) {
+                toast.error('Comanda nu a putut fi trimisă!', {
+                    icon: <span className="text-lg">❌</span>,
+                    position: 'top-center',
+                });
+            }
         }
     }, [isSuccess]);
     return (

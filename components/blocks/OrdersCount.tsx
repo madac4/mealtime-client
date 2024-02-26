@@ -3,11 +3,11 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Package } from 'lucide-react';
-import { useOrdersCountQuery } from '@/store/analytics/analyticsApi';
+import { useUserCardAnalyticsQuery } from '@/store/analytics/analyticsApi';
 import { Skeleton } from '../ui/skeleton';
 
 export default function OrdersCount({ className }: { className?: string }) {
-    const { data } = useOrdersCountQuery({});
+    const { data } = useUserCardAnalyticsQuery({});
 
     return (
         <Card className={className}>
@@ -18,20 +18,17 @@ export default function OrdersCount({ className }: { className?: string }) {
             <CardContent>
                 <Loading>
                     <div className="md:text-2xl xs:text-xl text-md font-bold">
-                        {data && data.orderCount}
+                        {data?.userOrders}
                     </div>
                 </Loading>
-                <p className="text-xs text-muted-foreground mt-1">
-                    {/* <span className="text-green-600">+12%</span> de luna trecută */}
-                    Numărul de comenzi efectuate
-                </p>
+                <p className="text-xs text-muted-foreground mt-1">Numărul de comenzi efectuate</p>
             </CardContent>
         </Card>
     );
 }
 
 const Loading: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { isLoading } = useOrdersCountQuery({});
+    const { isLoading } = useUserCardAnalyticsQuery({});
     return (
         <>
             {isLoading ? (
