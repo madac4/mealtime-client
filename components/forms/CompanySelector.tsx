@@ -28,7 +28,7 @@ export default function CompanySelector({ form }: { form: any }) {
     return (
         <FormField
             control={form.control}
-            name="companyId"
+            name="company"
             render={({ field }) => (
                 <FormItem className="flex flex-col justify-end col-span-2">
                     <FormLabel>Compania</FormLabel>
@@ -43,7 +43,7 @@ export default function CompanySelector({ form }: { form: any }) {
                                         !field.value && 'text-muted-foreground',
                                     )}>
                                     {field.value
-                                        ? companies.find((company) => company._id === field.value)
+                                        ? companies.find((company) => company.id === field.value)
                                               ?.name
                                         : 'Selectează compania'}
                                     <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
@@ -59,15 +59,15 @@ export default function CompanySelector({ form }: { form: any }) {
                                     {companies.length > 0 &&
                                         companies.map((company) => (
                                             <CommandItem
-                                                value={company._id}
-                                                key={company._id}
+                                                value={company.id}
+                                                key={company.id}
                                                 onSelect={() => {
-                                                    form.setValue('companyId', company._id);
+                                                    form.setValue('company', company.id);
                                                 }}>
                                                 <Check
                                                     className={cn(
                                                         'mr-2 h-4 w-4',
-                                                        company._id === field.value
+                                                        company.id === field.value
                                                             ? 'opacity-100'
                                                             : 'opacity-0',
                                                     )}

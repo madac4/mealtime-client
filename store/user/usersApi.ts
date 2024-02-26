@@ -1,4 +1,4 @@
-import { apiSlice } from '../api/apiSlice';
+import { apiSlice } from '../api/api.config';
 
 export const usersApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -16,15 +16,7 @@ export const usersApi = apiSlice.injectEndpoints({
                 credentials: 'include' as const,
             }),
         }),
-        registerUser: builder.mutation({
-            query: (body) => ({
-                url: '/register',
-                method: 'POST',
-                body,
-                credentials: 'include' as const,
-            }),
-        }),
     }),
 });
 
-export const { useGetUsersQuery, useDeleteUserMutation, useRegisterUserMutation } = usersApi;
+export const { useGetUsersQuery, useDeleteUserMutation } = usersApi;

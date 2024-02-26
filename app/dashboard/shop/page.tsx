@@ -19,7 +19,9 @@ export default function Shop() {
             </Loading>
 
             <div className="products mb-32 flex flex-col items-center">
-                <ProductsGrid />
+                <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <ProductsGrid />
+                </div>
             </div>
         </div>
     );

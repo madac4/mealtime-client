@@ -1,7 +1,6 @@
 'use client';
-import React from 'react';
-import { columns } from './columns';
 import { DataTable } from './data-table';
+import { columns } from './columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useGetProductsQuery } from '@/store/products/productsApi';
 
@@ -21,7 +20,7 @@ export default function Products() {
                             <Skeleton className="w-full h-screen rounded-lg" />
                         </div>
                     ) : (
-                        data && <DataTable columns={columns} data={data.products} />
+                        <DataTable columns={columns} data={data?.products} />
                     )}
                 </div>
             </div>

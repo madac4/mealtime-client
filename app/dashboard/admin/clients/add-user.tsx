@@ -8,9 +8,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { useRegisterUserMutation } from '@/store/users/usersApi';
 import { Store } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export function AddUserModal() {
     const [success, setSuccess] = useState<boolean>(false);

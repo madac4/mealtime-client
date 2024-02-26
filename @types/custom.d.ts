@@ -58,7 +58,7 @@ export interface IUser {
 }
 
 export interface ICompany {
-    _id: string;
+    id: string;
     name: string;
     address: string;
     IDNO: string;

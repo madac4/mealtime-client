@@ -1,4 +1,4 @@
-import { apiSlice } from '../api/apiSlice';
+import { apiSlice } from '../api/api.config';
 
 export const analyticsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -11,7 +11,7 @@ export const analyticsApi = apiSlice.injectEndpoints({
         }),
         ordersCount: builder.query({
             query: () => ({
-                url: '/orders/count',
+                url: '/orders',
                 method: 'GET',
                 credentials: 'include' as const,
             }),
@@ -23,7 +23,19 @@ export const analyticsApi = apiSlice.injectEndpoints({
                 credentials: 'include' as const,
             }),
         }),
+        adminCardAnalytics: builder.query({
+            query: () => ({
+                url: '/admin/card-analytics',
+                method: 'GET',
+                credentials: 'include' as const,
+            }),
+        }),
     }),
 });
 
-export const { useOrdersHistoryQuery, useOrdersCountQuery, useOrdersSumQuery } = analyticsApi;
+export const {
+    useOrdersHistoryQuery,
+    useOrdersCountQuery,
+    useOrdersSumQuery,
+    useAdminCardAnalyticsQuery,
+} = analyticsApi;

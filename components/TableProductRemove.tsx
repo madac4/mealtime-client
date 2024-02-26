@@ -14,24 +14,30 @@ import { Button } from './ui/button';
 import { useDeleteProductsMutation } from '@/store/products/productsApi';
 import { Loader2, Trash2 } from 'lucide-react';
 import { IProduct } from '@/@types/custom';
+import { toast } from 'sonner';
 
 export default function TableProductRemove({ product }: { product: IProduct }) {
     const [deleteProduct, { isLoading, isSuccess, error }] = useDeleteProductsMutation();
 
-    const removeProduct = async (id: string) => {
-        try {
-            await deleteProduct(id);
-        } catch (error: any) {
-            console.log(error.message);
-        }
-    };
-
     useEffect(() => {
         if (isSuccess) {
-            alert('Produsul a fost sters cu succes!');
+            toast.success('Produsul a fost sters cu succes!', {
+                icon: <span className="text-lg">🗑️</span>,
+                position: 'top-center',
+            });
             window.location.reload();
         }
-    }, [isSuccess]);
+
+        if (error) {
+            if ('data' in error) {
+                toast.error('Produsul nu a putut fi șters, contactează administratorul.', {
+                    icon: <span className="text-lg">❌</span>,
+                    position: 'top-center',
+                });
+            }
+        }
+    }, [isSuccess, error]);
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -54,8 +60,8 @@ export default function TableProductRemove({ product }: { product: IProduct }) {
                     <AlertDialogCancel>Anulează</AlertDialogCancel>
                     <AlertDialogAction
                         className="bg-red-600"
-                        onClick={() => {
-                            removeProduct(product._id);
+                        onClick={async () => {
+                            await deleteProduct(product._id);
                         }}>
                         Șterge
                     </AlertDialogAction>

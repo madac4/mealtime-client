@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { TableProps } from '@/@types/custom';
-import { AddCompanyModal } from './add-company';
+import { AddCompanyModal } from '@/components/modals/AddCompanyModal';
 
 export function DataTable<TData, TValue>({ columns, data }: TableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

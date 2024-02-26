@@ -1,4 +1,4 @@
-import { apiSlice } from '../api/apiSlice';
+import { apiSlice } from '../api/api.config';
 import { userLoggedIn, userLoggedOut } from './authSlice';
 
 export interface ILoginData {
@@ -25,12 +25,12 @@ export const authApi = apiSlice.injectEndpoints({
             }),
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
-                    const result = await queryFulfilled;
+                    const { data } = await queryFulfilled;
 
                     dispatch(
                         userLoggedIn({
-                            accessToken: result.data.accessToken,
-                            user: result.data.user,
+                            accessToken: data.accessToken,
+                            user: data.user,
                         }),
                     );
                 } catch (error) {
@@ -38,13 +38,13 @@ export const authApi = apiSlice.injectEndpoints({
                 }
             },
         }),
-        logOut: builder.query({
+
+        logOut: builder.mutation({
             query: () => ({
                 url: '/logout',
                 method: 'GET',
                 credentials: 'include' as const,
             }),
-
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
                     dispatch(userLoggedOut());
@@ -53,6 +53,7 @@ export const authApi = apiSlice.injectEndpoints({
                 }
             },
         }),
+
         register: builder.mutation({
             query: (body) => ({
                 url: '/register',
@@ -64,4 +65,4 @@ export const authApi = apiSlice.injectEndpoints({
     }),
 });
 
-export const { useLoginMutation, useLogOutQuery } = authApi;
+export const { useLoginMutation, useLogOutMutation, useRegisterMutation } = authApi;

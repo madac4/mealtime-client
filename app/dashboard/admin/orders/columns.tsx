@@ -23,36 +23,22 @@ export type IOrder = {
 
 export const columns: ColumnDef<IOrder>[] = [
     {
-        accessorKey: 'companyName',
+        accessorKey: 'company',
         header: 'Companie',
-        cell: ({ row }) => {
-            const companyName = row.original.customer?.company?.name;
-
-            return <p>{companyName && companyName}</p>;
-        },
     },
     {
         accessorKey: 'address',
         header: 'Adresa',
-        cell: ({ row }) => {
-            const address = row.original.customer?.address;
-            return <p>{address && address}</p>;
-        },
     },
     {
         accessorKey: 'products',
         header: 'Nr. Produse',
-        cell: ({ row }) => {
-            const products = row.original.products.length;
-
-            return <p>{products}</p>;
-        },
     },
     {
         accessorKey: 'phone',
         header: 'Telefon',
         cell: ({ row }) => {
-            const phone = row.original.customer?.phone;
+            const phone = row.original.phone;
 
             return (
                 phone && (
@@ -79,12 +65,4 @@ export const columns: ColumnDef<IOrder>[] = [
             );
         },
     },
-    // {
-    //     id: 'actions',
-    //     cell: ({ row }) => (
-    //         <Button size="icon" variant="outline" className="outline-none">
-    //             <EyeIcon className="h-5 w-5"> </EyeIcon>
-    //         </Button>
-    //     ),
-    // },
 ];

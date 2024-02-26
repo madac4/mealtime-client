@@ -29,9 +29,9 @@ export default function History({ className }: { className?: string }) {
                             </div>
                         ))
                     ) : (
-                        <h3 className="text-center font-semibold mx-auto">
+                        <h5 className="text-center font-semibold mx-auto">
                             Încă nu ai plasat nici o comandă
-                        </h3>
+                        </h5>
                     )}
                 </>
             </Loading>

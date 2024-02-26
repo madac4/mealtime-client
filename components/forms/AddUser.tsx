@@ -5,12 +5,12 @@ import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { useRegisterUserMutation } from '@/store/users/usersApi';
 import CompanySelector from './CompanySelector';
 import { Loader2 } from 'lucide-react';
+import { useRegisterMutation } from '@/store/auth/authApi';
 
 const FormSchema = z.object({
-    companyId: z.string({
+    company: z.string({
         required_error: 'Selectează compania.',
     }),
     address: z.string({
@@ -36,12 +36,12 @@ const FormSchema = z.object({
 });
 
 export default function AddUser({ setSuccess }: { setSuccess: any }) {
-    const [registerUser, { isLoading, isSuccess }] = useRegisterUserMutation();
+    const [registerUser, { isLoading, isSuccess }] = useRegisterMutation();
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            companyId: '',
+            company: '',
             address: '',
             person: '',
             password: '',
@@ -53,7 +53,7 @@ export default function AddUser({ setSuccess }: { setSuccess: any }) {
 
     const handleRegisterUser = async (values: z.infer<typeof FormSchema>) => {
         await registerUser({
-            companyId: values.companyId,
+            company: values.company,
             address: values.address,
             person: values.person,
             password: values.password,

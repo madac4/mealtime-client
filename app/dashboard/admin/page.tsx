@@ -1,96 +1,31 @@
 'use client';
-import RecentSales from '@/components/blocks/RecentSales';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Building2, CreditCard, DollarSign, Package } from 'lucide-react';
-import { BarChart, LineChart } from '@tremor/react';
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Building2, CreditCard, Package, Store } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useAdminCardAnalyticsQuery } from '@/store/analytics/analyticsApi';
 
 export default function Dashboard() {
-    const { user } = useSelector((state: any) => state.auth);
-    const [productsStatistic, setProductsStatistic] = useState<any>(null);
-    const [loadingData, setLoadingData] = useState<boolean>(false);
-    const chartdata = [
-        {
-            name: 'Rompetrrol',
-            'Suma comenzilor (MDL)': 126261,
-        },
-        {
-            name: 'Vento',
-            'Suma comenzilor (MDL)': 29632,
-        },
-        {
-            name: 'Petrom',
-            'Suma comenzilor (MDL)': 78251,
-        },
-        {
-            name: 'Bemol',
-            'Suma comenzilor (MDL)': 51521,
-        },
-        {
-            name: 'Avante',
-            'Suma comenzilor (MDL)': 15237,
-        },
-        {
-            name: 'Lukoil',
-            'Suma comenzilor (MDL)': 20236,
-        },
-        {
-            name: 'Now',
-            'Suma comenzilor (MDL)': 12032,
-        },
-    ];
-
-    const ordersStatistics = [
-        {
-            date: 'Ian 23',
-            'Nr. de comenzi': 12,
-            'Venit din comenzi': 12592,
-        },
-        { date: 'Feb 23', 'Nr. de comenzi': 18, 'Venit din comenzi': 28920 },
-        { date: 'Mar 23', 'Nr. de comenzi': 22, 'Venit din comenzi': 14830 },
-        { date: 'Apr 23', 'Nr. de comenzi': 17, 'Venit din comenzi': 16200 },
-        { date: 'Mai 23', 'Nr. de comenzi': 20, 'Venit din comenzi': 27340 },
-        { date: 'Iun 23', 'Nr. de comenzi': 15, 'Venit din comenzi': 13050 },
-        { date: 'Iul 23', 'Nr. de comenzi': 48, 'Venit din comenzi': 52760 },
-        { date: 'Aug 23', 'Nr. de comenzi': 19, 'Venit din comenzi': 15080 },
-        { date: 'Sep 23', 'Nr. de comenzi': 21, 'Venit din comenzi': 19590 },
-        { date: 'Oct 23', 'Nr. de comenzi': 11, 'Venit din comenzi': 12550 },
-        { date: 'Noi 23', 'Nr. de comenzi': 62, 'Venit din comenzi': 65927 },
-        { date: 'Dec 23', 'Nr. de comenzi': null, 'Venit din comenzi': null },
-    ];
+    const { data } = useAdminCardAnalyticsQuery({});
 
     return (
         <>
             <div className="dashboard py-5 mb-5">
                 <div className="container">
-                    {loadingData ? (
-                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                            <Skeleton className="h-full h-[130px]" />
-                            <Skeleton className="h-full h-[130px]" />
-                            <Skeleton className="h-full h-[130px]" />
-                            <Skeleton className="h-full h-[130px]" />
-                            <Skeleton className="col-span-2 h-[470px]" />
-                            <Skeleton className="col-span-2 h-[470px]" />
-                            <Skeleton className="lg:col-span-4 col-span-2 h-[440px]" />
-                        </div>
-                    ) : (
+                    <Loading>
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                             <Card>
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">
-                                        Venit Total
+                                        Puncte de vânzare
                                     </CardTitle>
-                                    <DollarSign className="h-4 w-4 text-muted-foreground"></DollarSign>
+                                    <Store className="h-4 w-4 text-muted-foreground"></Store>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="md:text-2xl xs:text-xl text-md font-bold">
-                                        45.231,89 MDL
+                                        {data?.usersCount || 0}
                                     </div>
                                     <p className="text-xs text-muted-foreground mt-1">
-                                        <span className="text-green-600">+20.1%</span> de luna
-                                        trecută
+                                        Total puncte de vânzare active
                                     </p>
                                 </CardContent>
                             </Card>
@@ -101,11 +36,10 @@ export default function Dashboard() {
                                 </CardHeader>
                                 <CardContent>
                                     <div className="md:text-2xl xs:text-xl text-md font-bold">
-                                        5.291
+                                        {data?.ordersCount || 0}
                                     </div>
                                     <p className="text-xs text-muted-foreground mt-1">
-                                        <span className="text-green-600">+69.1%</span> de luna
-                                        trecută
+                                        Total comenzi efectuate
                                     </p>
                                 </CardContent>
                             </Card>
@@ -116,10 +50,10 @@ export default function Dashboard() {
                                 </CardHeader>
                                 <CardContent>
                                     <div className="md:text-2xl xs:text-xl text-md font-bold">
-                                        82
+                                        {data?.companiesCount || 0}
                                     </div>
                                     <p className="text-xs text-muted-foreground mt-1">
-                                        <span className="text-green-600">+30</span> de anul trecut
+                                        Total companii înregistrate
                                     </p>
                                 </CardContent>
                             </Card>
@@ -130,17 +64,14 @@ export default function Dashboard() {
                                 </CardHeader>
                                 <CardContent>
                                     <div className="md:text-2xl xs:text-xl text-md font-bold">
-                                        29
+                                        {data?.productsCount || 0}
                                     </div>
                                     <p className="text-xs text-muted-foreground mt-1">
-                                        <span className="text-green-600">+9</span> de anul trecut
+                                        Produse în vânzare
                                     </p>
-                                    {/* <p className="text-xs text-muted-foreground mt-1">
-                                            Produse în vânzare
-                                        </p> */}
                                 </CardContent>
                             </Card>
-                            <Card className="col-span-2">
+                            {/* <Card className="col-span-2">
                                 <CardHeader>
                                     <CardTitle>Vânzări recente</CardTitle>
                                     <CardDescription>
@@ -189,11 +120,32 @@ export default function Dashboard() {
                                         yAxisWidth={50}
                                     />
                                 </CardContent>
-                            </Card>
+                            </Card> */}
                         </div>
-                    )}
+                    </Loading>
                 </div>
             </div>
         </>
     );
 }
+
+const Loading: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { isLoading } = useAdminCardAnalyticsQuery({});
+    return (
+        <>
+            {isLoading ? (
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <Skeleton className="h-full h-[130px]" />
+                    <Skeleton className="h-full h-[130px]" />
+                    <Skeleton className="h-full h-[130px]" />
+                    <Skeleton className="h-full h-[130px]" />
+                    <Skeleton className="col-span-2 h-[470px]" />
+                    <Skeleton className="col-span-2 h-[470px]" />
+                    <Skeleton className="lg:col-span-4 col-span-2 h-[440px]" />
+                </div>
+            ) : (
+                <>{children}</>
+            )}
+        </>
+    );
+};

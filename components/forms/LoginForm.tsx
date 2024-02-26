@@ -1,44 +1,35 @@
 'use client';
+import { ILogin } from '@/@types/custom';
 import { useLoginMutation } from '@/store/auth/authApi';
 import { zodResolver } from '@hookform/resolvers/zod';
-import ErrorMessage from '@/components/ErrorMessage';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { ILogin } from '@/@types/custom';
+import { useSelector } from 'react-redux';
 import * as validation from 'zod';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
-import userAuth from '@/hooks/userAuth';
+import ErrorMessage from '../ErrorMessage';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Button } from '../ui/button';
+import { useRouter } from 'next/navigation';
 
-export default function Login() {
+const formSchema = validation
+    .object({
+        login: validation
+            .string()
+            .min(5, { message: 'Login-ul trebuie sa fie de minim 5 caractere' })
+            .max(30, { message: 'Login-ul nu poate avea mai mult de 30 de caractere' }),
+        password: validation
+            .string()
+            .min(6, { message: 'Parola trebuie sa fie de minim 6 caractere' }),
+    })
+    .required();
+
+export default function LoginForm() {
     const [login, { isLoading, isSuccess, error }] = useLoginMutation();
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const { user } = useSelector((state: any) => state.auth);
-    const isAuthentificated = userAuth();
     const router = useRouter();
-    const formSchema = validation
-        .object({
-            login: validation
-                .string()
-                .min(5, { message: 'Login-ul trebuie sa fie de minim 5 caractere' })
-                .max(30, { message: 'Login-ul nu poate avea mai mult de 30 de caractere' }),
-            password: validation
-                .string()
-                .min(6, { message: 'Parola trebuie sa fie de minim 6 caractere' }),
-        })
-        .required();
-
     const form = useForm<validation.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -55,23 +46,13 @@ export default function Login() {
     }
 
     useEffect(() => {
-        if (isSuccess) {
-            user.isAdmin ? router.push('/dashboard/admin') : router.push('/dashboard/shop');
+        if (isSuccess || user) {
+            user.isAdmin ? router.replace('/dashboard/admin') : router.replace('/dashboard/shop');
         }
     }, [isSuccess, user]);
 
-    useEffect(() => {
-        if (isAuthentificated && user?.isAdmin) {
-            router.push('/dashboard/admin');
-        } else if (isAuthentificated && !user?.isAdmin) {
-            router.push('/dashboard/shop');
-        }
-    }, [isAuthentificated]);
-
     return (
-        <div className="flex h-screen w-screen items-center flex-col justify-center container">
-            <img src="/images/logo.png" alt="" className="w-32 mb-10" />
-
+        <>
             {error && <ErrorMessage error={error} type="text" />}
 
             <Form {...form}>
@@ -132,6 +113,6 @@ export default function Login() {
                     </Button>
                 </form>
             </Form>
-        </div>
+        </>
     );
 }

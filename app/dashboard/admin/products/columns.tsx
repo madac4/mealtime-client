@@ -2,6 +2,7 @@ import { IProduct } from '@/@types/custom';
 import TableProductRemove from '@/components/TableProductRemove';
 import { formatPrice } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
+import Image from 'next/image';
 
 export const columns: ColumnDef<IProduct>[] = [
     {
@@ -9,8 +10,12 @@ export const columns: ColumnDef<IProduct>[] = [
         header: 'Imaginea',
         cell: ({ row }) => {
             return (
-                <img
-                    src={row.original.image.url}
+                <Image
+                    width={56}
+                    height={56}
+                    src={row.original?.image?.url}
+                    placeholder="blur"
+                    blurDataURL="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
                     alt={row.original.name}
                     className="h-14 w-14 rounded-sm object-cover"
                 />

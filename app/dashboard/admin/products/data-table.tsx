@@ -20,7 +20,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
-import { AddProductModal } from './add-product';
+import { AddProductModal } from '@/components/modals/AddProductModal';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -45,7 +45,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         <>
             <div className="flex items-center py-4 justify-between gap-4">
                 <Input
-                    placeholder="Caută după denumire"
+                    placeholder="Caută după nume"
                     value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
                         table.getColumn('name')?.setFilterValue(event.target.value)

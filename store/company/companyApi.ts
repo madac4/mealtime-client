@@ -1,4 +1,4 @@
-import { apiSlice } from '../api/apiSlice';
+import { apiSlice } from '../api/api.config';
 
 export const companyApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -9,7 +9,15 @@ export const companyApi = apiSlice.injectEndpoints({
                 credentials: 'include' as const,
             }),
         }),
+        createCompany: builder.mutation({
+            query: (data) => ({
+                url: '/create-company',
+                method: 'POST',
+                body: data,
+                credentials: 'include' as const,
+            }),
+        }),
     }),
 });
 
-export const { useGetCompaniesQuery } = companyApi;
+export const { useGetCompaniesQuery, useCreateCompanyMutation } = companyApi;

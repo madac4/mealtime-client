@@ -13,7 +13,7 @@ import {
 import { Button } from './ui/button';
 import { Loader2, Trash2 } from 'lucide-react';
 import { IUser } from '@/@types/custom';
-import { useDeleteUserMutation } from '@/store/users/usersApi';
+import { useDeleteUserMutation } from '@/store/user/usersApi';
 
 export default function TableUserRemove({ user }: { user: IUser }) {
     const [deleteUser, { isLoading, isSuccess, error }] = useDeleteUserMutation();

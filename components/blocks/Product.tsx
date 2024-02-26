@@ -4,10 +4,12 @@ import { Button } from '../ui/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '@/store/cart/cartSlice';
 import { IProductProps } from '@/@types/custom';
+import Image from 'next/image';
 
 const Product: React.FC<IProductProps> = ({ product }) => {
-    const dispatch = useDispatch();
     const productsInCart = useSelector((state: any) => state.cart.products);
+    const dispatch = useDispatch();
+
     const handleAddToCart = () => {
         const item = {
             ...product,
@@ -23,17 +25,19 @@ const Product: React.FC<IProductProps> = ({ product }) => {
         }
     };
     return (
-        <div className="p-5 border rounded-md">
-            <img
+        <div className="p-2 border rounded-md max-w-sm md:max-w-full w-full mx-auto">
+            <Image
+                className="rounded-md mb-2 object-contain"
                 src={product.image.url}
                 alt={product.name}
-                className="rounded mb-2 w-full object-contain"
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
+                width={440}
+                height={440}
             />
-            <h4>{product.name}</h4>
+            <p className="font-medium">{product.name}</p>
             <Badge className="my-2">{product.packageInfo}</Badge>
-            {/* <p className="mb-2 text-lg font-semibold text-red-600">
-                {formatPrice(product.price)} MDL / buc.
-            </p> */}
             <Button
                 className="bg-green-500 w-full mt-auto hover:bg-green-600 active:scale-[0.98] transition-all"
                 onClick={handleAddToCart}>

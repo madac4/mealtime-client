@@ -50,6 +50,7 @@ export const formattedDate = (date: Date) => {
         year: 'numeric',
     });
 };
+
 export const formattedTime = (date: Date) => {
     return date.toLocaleTimeString('en-GB', {
         hour: '2-digit',

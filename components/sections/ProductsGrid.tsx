@@ -11,7 +11,7 @@ export default function ProductsGrid() {
     const { data, error } = useGetProductsQuery({});
 
     return (
-        <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <>
             {error && <ErrorMessage error={error} />}
             {
                 <Loading>
@@ -28,7 +28,7 @@ export default function ProductsGrid() {
                     </>
                 </Loading>
             }
-        </div>
+        </>
     );
 }
 
