@@ -23,7 +23,6 @@ export const authApi = apiSlice.injectEndpoints({
                 },
                 headers: {
                     'Content-Type': 'application/json',
-                    getSetCookie: 'true',
                 },
                 credentials: 'include' as const,
             }),
