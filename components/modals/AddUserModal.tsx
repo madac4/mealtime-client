@@ -1,5 +1,4 @@
-import SuccessMessage from '@/components/SuccessMessage';
-import AddUser from '@/components/forms/AddUser';
+import AddUserForm from '@/components/forms/AddUserForm';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -9,11 +8,8 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Store } from 'lucide-react';
-import { useState } from 'react';
 
-export function AddUserModal() {
-    const [success, setSuccess] = useState<boolean>(false);
-
+export function AddUserModal({ table }: { table: any }) {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -27,13 +23,8 @@ export function AddUserModal() {
             <DialogContent className="sm:max-w-[595px]">
                 <DialogHeader>
                     <DialogTitle className="mb-3">Adaugă un punct nou de vânzare</DialogTitle>
-                    {success && (
-                        <SuccessMessage>
-                            Punctul de vânzare a fost adăugat cu success
-                        </SuccessMessage>
-                    )}
                 </DialogHeader>
-                <AddUser setSuccess={setSuccess} />
+                <AddUserForm table={table} />
             </DialogContent>
         </Dialog>
     );

@@ -34,8 +34,6 @@ export default function ErrorMessage({ error, type }: IErrorMessage) {
                     <span className="text-lg">❌</span>
                 </div>
             )}
-
-            {type === 'toast' && toast.error('test')}
         </>
     );
 }

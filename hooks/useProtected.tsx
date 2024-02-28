@@ -10,7 +10,7 @@ export default function Protected({ children }: ProtecredProps) {
     const router = useRouter();
 
     if (isAuthenticated) {
-        return children;
+        return <>{children}</>;
     } else {
         router.replace('/');
     }

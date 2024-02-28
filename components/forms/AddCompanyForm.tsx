@@ -6,6 +6,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Loader2 } from 'lucide-react';
+import { useEffect } from 'react';
+import { useToast } from '@/hooks/useToast';
 
 const formSchema = validation
     .object({
@@ -18,8 +20,9 @@ const formSchema = validation
     })
     .required();
 
-export default function AddCompanyForm() {
+export default function AddCompanyForm({ table }: any) {
     const [createCompany, { isLoading, isSuccess, error }] = useCreateCompanyMutation();
+    const meta = table.options.meta;
     const form = useForm<validation.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -37,15 +40,26 @@ export default function AddCompanyForm() {
             TVA: values.TVA,
             IDNO: values.IDNO,
         });
+
+        meta?.addRow({
+            name: values.name,
+            address: values.address,
+            TVA: values.TVA,
+            IDNO: values.IDNO,
+        });
     };
+
+    useEffect(() => {
+        useToast({ isSuccess, message: 'Compania a fost adăugată cu succes' });
+        form.reset();
+    }, [isSuccess]);
+
+    useEffect(() => {
+        useToast({ error });
+    }, [error]);
 
     return (
         <>
-            {isSuccess && (
-                <div className="p-4 bg-green-200 rounded-sm flex items-center gap-2">
-                    Compania a fost adăugată cu success <span className="text-lg">✅</span>
-                </div>
-            )}
             <Form {...form}>
                 <form className="grid gap-4 py-4" onSubmit={form.handleSubmit(handleAddCompany)}>
                     <FormField
@@ -117,7 +131,7 @@ export default function AddCompanyForm() {
                         disabled={isLoading}
                         className="bg-green-500 hover:bg-green-600">
                         {isLoading && <Loader2 className="mr-1 h-4 w-4 animate-spin"></Loader2>}
-                        Adaugă Compania
+                        Adaugă compania
                     </Button>
                 </form>
             </Form>

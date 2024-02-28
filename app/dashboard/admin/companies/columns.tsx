@@ -1,6 +1,7 @@
 'use client';
 
 import { ICompany } from '@/@types/custom';
+import TableCompanyRemove from '@/components/table/TableCompanyRemove';
 import { ColumnDef } from '@tanstack/react-table';
 export const columns: ColumnDef<ICompany>[] = [
     {
@@ -23,7 +24,19 @@ export const columns: ColumnDef<ICompany>[] = [
         accessorKey: 'users',
         header: 'Puncte de livrare',
         cell: ({ row }) => {
-            return row.original.users.length
+            if (row.original.users) {
+                return row.original.users.length;
+            }
+            return 0;
+        },
+    },
+    {
+        accessorKey: 'actions',
+        header: '',
+        cell: ({ row, table }) => {
+            const company = row.original;
+
+            return <TableCompanyRemove company={company} table={table} row={row} />;
         },
     },
 ];

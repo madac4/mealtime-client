@@ -9,34 +9,30 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from './ui/alert-dialog';
-import { Button } from './ui/button';
+} from '../ui/alert-dialog';
+import { Button } from '../ui/button';
 import { useDeleteProductsMutation } from '@/store/products/productsApi';
 import { Loader2, Trash2 } from 'lucide-react';
 import { IProduct } from '@/@types/custom';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/useToast';
 
-export default function TableProductRemove({ product }: { product: IProduct }) {
+interface IProductRemoveProps {
+    product: IProduct;
+    table: any;
+    row: any;
+}
+
+export default function TableProductRemove({ product, table, row }: IProductRemoveProps) {
     const [deleteProduct, { isLoading, isSuccess, error }] = useDeleteProductsMutation();
+    const meta = table.options.meta;
 
     useEffect(() => {
-        if (isSuccess) {
-            toast.success('Produsul a fost sters cu succes!', {
-                icon: <span className="text-lg">🗑️</span>,
-                position: 'top-center',
-            });
-            window.location.reload();
-        }
+        useToast({ isSuccess, message: 'Produsul a fost șters cu succes.', error });
+    }, [isSuccess]);
 
-        if (error) {
-            if ('data' in error) {
-                toast.error('Produsul nu a putut fi șters, contactează administratorul.', {
-                    icon: <span className="text-lg">❌</span>,
-                    position: 'top-center',
-                });
-            }
-        }
-    }, [isSuccess, error]);
+    useEffect(() => {
+        useToast({ error });
+    }, [error]);
 
     return (
         <AlertDialog>
@@ -62,6 +58,7 @@ export default function TableProductRemove({ product }: { product: IProduct }) {
                         className="bg-red-600"
                         onClick={async () => {
                             await deleteProduct(product._id);
+                            meta?.removeRow(row.index);
                         }}>
                         Șterge
                     </AlertDialogAction>

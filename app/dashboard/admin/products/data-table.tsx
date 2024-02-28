@@ -29,8 +29,10 @@ interface DataTableProps<TData, TValue> {
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [newData, setNewData] = useState(() => [...data]);
+
     const table = useReactTable({
-        data,
+        data: newData,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -38,6 +40,18 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         getFilteredRowModel: getFilteredRowModel(),
         state: {
             columnFilters,
+        },
+        meta: {
+            addRow: (values: any) => {
+                const newRow = values;
+                const setFunc = (old: any) => [newRow, ...old];
+                setNewData(setFunc);
+            },
+            removeRow: (id: number) => {
+                const setFilterFunc = (old: any) =>
+                    old.filter((_row: any, index: number) => index !== id);
+                setNewData(setFilterFunc);
+            },
         },
     });
 
@@ -53,7 +67,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                     className="max-w-sm"
                 />
 
-                <AddProductModal />
+                <AddProductModal table={table} />
             </div>
             <div className="rounded-md border">
                 <Table className="min-w-[760px] whitespace-nowrap">

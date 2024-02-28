@@ -1,4 +1,3 @@
-import { ICompanyBody } from '@/@types/custom';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -9,10 +8,9 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Building2 } from 'lucide-react';
-import { useState } from 'react';
 import AddCompanyForm from '../forms/AddCompanyForm';
 
-export function AddCompanyModal() {
+export function AddCompanyModal({ table }: any) {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -31,7 +29,7 @@ export function AddCompanyModal() {
                     </DialogDescription>
                 </DialogHeader>
 
-                <AddCompanyForm />
+                <AddCompanyForm table={table} />
             </DialogContent>
         </Dialog>
     );

@@ -9,29 +9,33 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from './ui/alert-dialog';
-import { Button } from './ui/button';
+} from '../ui/alert-dialog';
+import { Button } from '../ui/button';
 import { Loader2, Trash2 } from 'lucide-react';
 import { IUser } from '@/@types/custom';
 import { useDeleteUserMutation } from '@/store/user/usersApi';
+import { useToast } from '@/hooks/useToast';
 
-export default function TableUserRemove({ user }: { user: IUser }) {
+export default function TableUserRemove({
+    user,
+    table,
+    row,
+}: {
+    user: IUser;
+    table: any;
+    row: any;
+}) {
     const [deleteUser, { isLoading, isSuccess, error }] = useDeleteUserMutation();
-
-    const removeUser = async (id: string) => {
-        try {
-            await deleteUser(id);
-        } catch (error: any) {
-            console.log(error.message);
-        }
-    };
+    const meta = table.options.meta;
 
     useEffect(() => {
-        if (isSuccess) {
-            alert('Punctul de livrare a fost sters cu succes!');
-            window.location.reload();
-        }
+        useToast({ isSuccess, message: 'Punctul de livrare a fost sters cu succes!', error });
     }, [isSuccess]);
+
+    useEffect(() => {
+        useToast({ error });
+    }, [error]);
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -55,8 +59,9 @@ export default function TableUserRemove({ user }: { user: IUser }) {
                     <AlertDialogCancel>Anulează</AlertDialogCancel>
                     <AlertDialogAction
                         className="bg-red-600"
-                        onClick={() => {
-                            removeUser(user._id);
+                        onClick={async () => {
+                            await deleteUser(user._id);
+                            meta?.removeRow(row.index);
                         }}>
                         Șterge
                     </AlertDialogAction>

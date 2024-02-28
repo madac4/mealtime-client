@@ -1,44 +1,29 @@
 'use client';
-import { ILogin } from '@/@types/custom';
 import { useLoginMutation } from '@/store/auth/authApi';
-import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 import * as validation from 'zod';
-import ErrorMessage from '../ErrorMessage';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
-
-const formSchema = validation
-    .object({
-        login: validation
-            .string()
-            .min(5, { message: 'Login-ul trebuie sa fie de minim 5 caractere' })
-            .max(30, { message: 'Login-ul nu poate avea mai mult de 30 de caractere' }),
-        password: validation
-            .string()
-            .min(6, { message: 'Parola trebuie sa fie de minim 6 caractere' }),
-    })
-    .required();
+import { useToast } from '@/hooks/useToast';
+import { checkAdmin } from '@/hooks/userAuth';
+import { initialLoginSchema, loginFormSchema } from '@/constants/forms.config';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 
 export default function LoginForm() {
+    const form = useForm<validation.infer<typeof loginFormSchema>>({
+        resolver: zodResolver(loginFormSchema),
+        defaultValues: initialLoginSchema,
+    });
     const [login, { isLoading, isSuccess, error }] = useLoginMutation();
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const { user } = useSelector((state: any) => state.auth);
+    const isAdmin = checkAdmin();
     const router = useRouter();
-    const form = useForm<validation.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            login: '',
-            password: '',
-        } as ILogin,
-    });
 
-    async function onSubmit(values: validation.infer<typeof formSchema>) {
+    async function onSubmit(values: validation.infer<typeof loginFormSchema>) {
         await login({
             login: values.login,
             password: values.password,
@@ -46,15 +31,17 @@ export default function LoginForm() {
     }
 
     useEffect(() => {
-        if (isSuccess || user) {
-            user.isAdmin ? router.replace('/dashboard/admin') : router.replace('/dashboard/shop');
+        if (isSuccess) {
+            isAdmin ? router.replace('/dashboard/admin') : router.replace('/dashboard/shop');
         }
-    }, [isSuccess, user]);
+    }, [isSuccess, isAdmin]);
+
+    useEffect(() => {
+        useToast({ error });
+    }, [error]);
 
     return (
         <>
-            {error && <ErrorMessage error={error} type="text" />}
-
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}

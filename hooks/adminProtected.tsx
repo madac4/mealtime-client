@@ -12,7 +12,7 @@ export default function AdminProtected({ children }: ProtectedProps) {
     const { user } = useSelector((state: any) => state.auth);
 
     if (user.isAdmin) {
-        return children;
+        return <>{children}</>;
     } else {
         return (
             <div className="flex flex-col items-center justify-center h-full py-10">

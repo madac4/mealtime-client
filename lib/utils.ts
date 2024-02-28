@@ -16,14 +16,12 @@ export function formatDateTime(stringDate: string): string {
 
     const pad = (num: number) => (num < 10 ? `0${num}` : num);
 
-    // Extracting day, month, year, hours, and minutes
     const day = pad(date.getDate());
-    const month = pad(date.getMonth() + 1); // Months are 0-indexed
+    const month = pad(date.getMonth() + 1);
     const year = date.getFullYear();
     const hours = pad(date.getHours());
     const minutes = pad(date.getMinutes());
 
-    // Formatting the date
     return `${day}.${month}.${year} | ${hours}:${minutes}`;
 }
 
@@ -61,3 +59,26 @@ export const formattedTime = (date: Date) => {
 export const formatPhone = (phone: string) => {
     return `${phone.slice(0, 4)} ${phone.slice(4, 6)} ${phone.slice(6, 9)} ${phone.slice(9)}`;
 };
+
+export function generateLogin(code: string, city: string) {
+    let formattedCity = city.replace(/[\sășțȘȚĂ]/g, function (match: string) {
+        switch (match) {
+            case 'ș':
+                return 's';
+            case 'ț':
+                return 't';
+            case 'Ș':
+                return 'S';
+            case 'Ț':
+                return 'T';
+            case 'ă':
+                return 'a';
+            case 'Ă':
+                return 'A';
+            default:
+                return '';
+        }
+    });
+
+    return (code.replace(/\s/g, '') + '-' + formattedCity).toLowerCase();
+}

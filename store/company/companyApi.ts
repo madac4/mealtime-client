@@ -17,7 +17,15 @@ export const companyApi = apiSlice.injectEndpoints({
                 credentials: 'include' as const,
             }),
         }),
+        deleteCompany: builder.mutation({
+            query: (id) => ({
+                url: `/delete-company/${id}`,
+                method: 'DELETE',
+                credentials: 'include' as const,
+            }),
+        }),
     }),
 });
 
-export const { useGetCompaniesQuery, useCreateCompanyMutation } = companyApi;
+export const { useGetCompaniesQuery, useCreateCompanyMutation, useDeleteCompanyMutation } =
+    companyApi;

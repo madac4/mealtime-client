@@ -55,6 +55,8 @@ export interface IUser {
     phone: string;
     date: string;
     login: string;
+    companyName?: string;
+    removeRow?: (id: number) => void;
 }
 
 export interface ICompany {
@@ -80,4 +82,30 @@ export interface ICompanyBody {
     address: string;
     IDNO: string;
     TVA: string;
+}
+
+export interface ICompanyQuery {
+    data: {
+        companies: ICompany[];
+    };
+    error: any;
+}
+
+export interface IRegister {
+    company: string;
+    address: string;
+    person: string;
+    password: string;
+    UUID: string;
+    city: string;
+    phone: string;
+}
+
+export interface ICompaniesSelect {
+    data: {
+        companies: ICompany[];
+    };
+    error: any;
+    isLoading: boolean;
+    isSuccess: boolean;
 }

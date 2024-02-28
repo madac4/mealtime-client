@@ -8,50 +8,20 @@ import { Input } from '../ui/input';
 import CompanySelector from './CompanySelector';
 import { Loader2 } from 'lucide-react';
 import { useRegisterMutation } from '@/store/auth/authApi';
+import { useToast } from '@/hooks/useToast';
+import { initialRegisterSchema, registerFormSchema } from '@/constants/forms.config';
+import { generateLogin } from '@/lib/utils';
 
-const FormSchema = z.object({
-    company: z.string({
-        required_error: 'Selectează compania.',
-    }),
-    address: z.string({
-        required_error: 'Adresa este obligatorie.',
-    }),
-    person: z.string({
-        required_error: 'Persoana de contact este obligatorie.',
-    }),
-    password: z
-        .string({
-            required_error: 'Parola este obligatorie.',
-        })
-        .min(6, { message: 'Parola trebuie să aibă minim 6 caractere.' }),
-    UUID: z.string({
-        required_error: 'UUID-ul este obligatoriu.',
-    }),
-    city: z.string({
-        required_error: 'Orașul este obligatoriu.',
-    }),
-    phone: z.string({
-        required_error: 'Numărul de telefon este obligatoriu.',
-    }),
-});
+export default function AddUserForm({ table }: { table: any }) {
+    const [registerUser, { isLoading, isSuccess, error }] = useRegisterMutation();
+    const meta = table.options.meta;
 
-export default function AddUser({ setSuccess }: { setSuccess: any }) {
-    const [registerUser, { isLoading, isSuccess }] = useRegisterMutation();
-
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
-        defaultValues: {
-            company: '',
-            address: '',
-            person: '',
-            password: '',
-            UUID: '',
-            city: '',
-            phone: '',
-        },
+    const form = useForm<z.infer<typeof registerFormSchema>>({
+        resolver: zodResolver(registerFormSchema),
+        defaultValues: initialRegisterSchema,
     });
 
-    const handleRegisterUser = async (values: z.infer<typeof FormSchema>) => {
+    const handleRegisterUser = async (values: z.infer<typeof registerFormSchema>) => {
         await registerUser({
             company: values.company,
             address: values.address,
@@ -62,18 +32,28 @@ export default function AddUser({ setSuccess }: { setSuccess: any }) {
             phone: values.phone,
         });
 
-        form.reset();
+        const login = generateLogin(values.UUID, values.city);
+
+        meta?.addRow({
+            company: values.companyName,
+            address: values.address,
+            person: values.person,
+            password: values.password,
+            UUID: values.UUID,
+            city: values.city,
+            phone: values.phone,
+            login,
+        });
     };
 
     useEffect(() => {
-        if (isSuccess) {
-            setSuccess(true);
-        }
-
-        setTimeout(() => {
-            setSuccess(false);
-        }, 2000);
+        useToast({ isSuccess, message: 'Punctul de vânzare a fost adăugat cu succes' });
+        form.reset();
     }, [isSuccess]);
+
+    useEffect(() => {
+        useToast({ error });
+    }, [error]);
 
     return (
         <>

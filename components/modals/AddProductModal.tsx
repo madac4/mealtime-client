@@ -10,7 +10,7 @@ import {
 } from '../ui/dialog';
 import { Plus } from 'lucide-react';
 
-export function AddProductModal() {
+export function AddProductModal({ table }: { table: any }) {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -30,7 +30,7 @@ export function AddProductModal() {
                     </DialogDescription>
                 </DialogHeader>
 
-                <AddProductForm />
+                <AddProductForm table={table} />
             </DialogContent>
         </Dialog>
     );

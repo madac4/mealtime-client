@@ -3,46 +3,44 @@ import { useCreateProductMutation } from '@/store/products/productsApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as validation from 'zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '../ui/form';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
 import { useEffect } from 'react';
+import { useToast } from '@/hooks/useToast';
+import { initialProductSchema, productFormSchema } from '@/constants/forms.config';
 
-const formSchema = validation
-    .object({
-        name: validation.string().min(3, { message: 'Numele trebuie să aibă minim 3 caractere' }),
-        image: validation.any(),
-        UUID: validation.string(),
-        price: validation.string(),
-        packageInfo: validation.string(),
-        packageSize: validation.string(),
-    })
-    .required();
-
-export default function AddProductForm() {
+export default function AddProductForm({ table }: { table: any }) {
     const [createProduct, { isLoading, isSuccess, error }] = useCreateProductMutation();
-    const form = useForm<validation.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            name: '',
-            image: null,
-            UUID: '',
-            price: '',
-            packageInfo: '',
-            packageSize: '',
-        },
+    const meta = table.options.meta;
+
+    const form = useForm<validation.infer<typeof productFormSchema>>({
+        resolver: zodResolver(productFormSchema),
+        defaultValues: initialProductSchema,
     });
 
-    const handleAddProduct = async (values: validation.infer<typeof formSchema>) => {
+    const handleAddProduct = async (values: validation.infer<typeof productFormSchema>) => {
         if (!values.image) {
-            return toast.error('Imaginea este obligatorie', {
-                position: 'top-center',
-                icon: <span className="text-lg">⚠️</span>,
-            });
+            const error = new Error();
+            return useToast({ error, message: 'Imaginea este obligatorie' });
         }
+
+        if (values.image.size > 10000000) {
+            const error = new Error();
+            return useToast({ error, message: 'Imaginea este prea mare' });
+        }
+
         const base64Image = await toBase64(values.image);
+
         await createProduct({
             name: values.name,
             image: base64Image,
@@ -51,26 +49,24 @@ export default function AddProductForm() {
             packageInfo: values.packageInfo,
             packageSize: Number(values.packageSize),
         });
+
+        meta.addRow({
+            name: values.name,
+            image: { url: base64Image },
+            UUID: values.UUID,
+            price: Number(values.price),
+            packageInfo: values.packageInfo,
+            packageSize: Number(values.packageSize),
+        });
     };
 
     useEffect(() => {
-        if (isSuccess) {
-            toast.success('Produsul a fost adăugat cu succes', {
-                icon: <span className="text-lg">✅</span>,
-                position: 'top-center',
-            });
-        }
+        useToast({ isSuccess, message: 'Produsul a fost adăugat cu succes' });
+    }, [isSuccess]);
 
-        if (error) {
-            if ('data' in error) {
-                const { data } = error as any;
-                toast.error(data?.message, {
-                    position: 'top-center',
-                    icon: <span className="text-lg">❌</span>,
-                });
-            }
-        }
-    }, [isSuccess, error]);
+    useEffect(() => {
+        useToast({ error });
+    }, [error]);
 
     return (
         <>
@@ -184,6 +180,8 @@ export default function AddProductForm() {
                                         multiple={false}
                                     />
                                 </FormControl>
+                                <FormDescription>Mărimea maximă a fișierului: 10MB</FormDescription>
+
                                 <FormMessage />
                             </FormItem>
                         )}

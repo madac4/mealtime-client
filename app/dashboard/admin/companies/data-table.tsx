@@ -24,9 +24,10 @@ import { AddCompanyModal } from '@/components/modals/AddCompanyModal';
 
 export function DataTable<TData, TValue>({ columns, data }: TableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [newData, setNewData] = useState(() => [...data]);
 
     const table = useReactTable({
-        data,
+        data: newData,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -34,6 +35,18 @@ export function DataTable<TData, TValue>({ columns, data }: TableProps<TData, TV
         getFilteredRowModel: getFilteredRowModel(),
         state: {
             columnFilters,
+        },
+        meta: {
+            addRow: (values: any) => {
+                const newRow = values;
+                const setFunc = (old: any) => [newRow, ...old];
+                setNewData(setFunc);
+            },
+            removeRow: (id: number) => {
+                const setFilterFunc = (old: any) =>
+                    old.filter((_row: any, index: number) => index !== id);
+                setNewData(setFilterFunc);
+            },
         },
     });
 
@@ -49,7 +62,7 @@ export function DataTable<TData, TValue>({ columns, data }: TableProps<TData, TV
                     className="max-w-sm mr-auto"
                 />
 
-                <AddCompanyModal />
+                <AddCompanyModal table={table} />
             </div>
             <div className="rounded-md border">
                 <Table className="min-w-[760px] whitespace-nowrap">

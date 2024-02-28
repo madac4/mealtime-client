@@ -1,5 +1,5 @@
 import { IProduct } from '@/@types/custom';
-import TableProductRemove from '@/components/TableProductRemove';
+import TableProductRemove from '@/components/table/TableProductRemove';
 import { formatPrice } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import Image from 'next/image';
@@ -48,10 +48,10 @@ export const columns: ColumnDef<IProduct>[] = [
     },
     {
         id: 'actions',
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
             const product = row.original;
 
-            return <TableProductRemove product={product} />;
+            return <TableProductRemove product={product} table={table} row={row} />;
         },
     },
 ];

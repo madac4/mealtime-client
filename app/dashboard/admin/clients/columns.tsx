@@ -1,7 +1,7 @@
 'use client';
 
 import { IUser } from '@/@types/custom';
-import TableUserRemove from '@/components/TableUserRemove';
+import TableUserRemove from '@/components/table/TableUserRemove';
 import { formatPhone } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
@@ -11,6 +11,9 @@ export const columns: ColumnDef<IUser>[] = [
         accessorKey: 'company',
         header: 'Companie',
         cell: ({ row }) => {
+            if (row.original?.company?.name === undefined) {
+                return row.original.company;
+            }
             return row.original?.company?.name;
         },
     },
@@ -45,10 +48,10 @@ export const columns: ColumnDef<IUser>[] = [
     {
         accessorKey: 'actions',
         header: '',
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
             const user = row.original;
 
-            return <TableUserRemove user={user} />;
+            return <TableUserRemove user={user} table={table} row={row} />;
         },
     },
 ];
